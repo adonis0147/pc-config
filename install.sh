@@ -60,19 +60,6 @@ function setup_zsh() {
 	fi
 
 	ln -snf "${DEVEL_ENV_PATH}/config/p10k.zsh" "${HOME}/.p10k.zsh"
-	ln -snf "${DEVEL_ENV_PATH}/profile.zsh" "${HOME}/.zprofile"
-
-	if [[ ! -f "${DEVEL_ENV_PATH}/env.zsh" ]]; then
-		local HOMEBREW_PREFIX
-		if [[ "$(uname -m)" == 'arm64' ]]; then
-			HOMEBREW_PREFIX='/opt/homebrew'
-		else
-			HOMEBREW_PREFIX='/usr/local'
-		fi
-		cat >"${DEVEL_ENV_PATH}/env.zsh" <<EOF
-export HOMEBREW_PREFIX="${HOMEBREW_PREFIX}"
-EOF
-	fi
 }
 
 function install_for_macos() {
@@ -84,6 +71,20 @@ function install_for_macos() {
 
 	install_zinit
 	setup_zsh
+
+	ln -snf "${DEVEL_ENV_PATH}/macOS/profile.zsh" "${HOME}/.zprofile"
+
+	if [[ ! -f "${DEVEL_ENV_PATH}/macOS/env.zsh" ]]; then
+		local HOMEBREW_PREFIX
+		if [[ "$(uname -m)" == 'arm64' ]]; then
+			HOMEBREW_PREFIX='/opt/homebrew'
+		else
+			HOMEBREW_PREFIX='/usr/local'
+		fi
+		cat >"${DEVEL_ENV_PATH}/macOS/env.zsh" <<EOF
+export HOMEBREW_PREFIX="${HOMEBREW_PREFIX}"
+EOF
+	fi
 }
 
 function install() {

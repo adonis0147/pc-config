@@ -2,21 +2,21 @@ if [[ -z "${DEVEL_ENV_PATH}" ]]; then
 	readonly DEVEL_ENV_PATH="${HOME}/.local/share/pc-devel-env"
 fi
 
-if [[ -f "${DEVEL_ENV_PATH}/env.zsh" ]]; then
-	source "${DEVEL_ENV_PATH}/env.zsh"
+if [[ -f "${DEVEL_ENV_PATH}/macOS/env.zsh" ]]; then
+	source "${DEVEL_ENV_PATH}/macOS/env.zsh"
 fi
 
 function change_homebrew_mirror() {
 	local content='export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles'
-	if ! grep "${content}" "${DEVEL_ENV_PATH}/env.zsh" &>/dev/null; then
+	if ! grep "${content}" "${DEVEL_ENV_PATH}/macOS/env.zsh" &>/dev/null; then
 		pushd "$(brew --repo)"
 		git remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
 		popd
 
 		brew update
-		echo -e "${content}" >>"${DEVEL_ENV_PATH}/env.zsh"
+		echo -e "${content}" >>"${DEVEL_ENV_PATH}/macOS/env.zsh"
 
-		source "${DEVEL_ENV_PATH}/env.zsh"
+		source "${DEVEL_ENV_PATH}/macOS/env.zsh"
 	fi
 }
 
@@ -34,9 +34,7 @@ function setup_path() {
 	local cellars=(
 		gnu-getopt
 		llvm
-		nvim
 		python@3
-		tmux
 	)
 	for cellar in "${cellars[@]}"; do
 		PATH="${HOMEBREW_PREFIX}/opt/${cellar}/bin:${PATH}"
@@ -89,6 +87,7 @@ function install_cellars() {
 		ninja
 		npm
 		python
+		ripgrep
 		tmux
 		wget
 	)
