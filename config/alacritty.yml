@@ -1,0 +1,71 @@
+env:
+   TERM: alacritty
+
+colors:
+  primary:
+    foreground: '#F8F8F2'
+    background: '#272822'
+  normal:
+    black:      '#272822'
+    red:        '#F92672'
+    green:      '#A6E22E'
+    yellow:     '#F4BF75'
+    blue:       '#66D9EF'
+    magenta:    '#AE81FF'
+    cyan:       '#A1EFE4'
+    white:      '#F8F8F2'
+  bright:
+    black:      '#75715E'
+    red:        '#F92672'
+    green:      '#A6E22E'
+    yellow:     '#F4BF75'
+    blue:       '#66D9EF'
+    magenta:    '#AE81FF'
+    cyan:       '#A1EFE4'
+    white:      '#F9F8F5'
+
+  cursor:
+    text:       '#272822'
+    cursor:     '#F8F8F2'
+
+  search:
+    matches:
+      foreground: '#272822'
+      background: '#66D9EF'
+    focused_match:
+      foreground: '#272822'
+      background: '#AE81FF'
+    footer_bar:
+      foreground: '#F8F8F2'
+      background: '#005F87'
+
+  line_indicator:
+    foreground: '#F8F8F2'
+    background: '#005F87'
+
+font:
+  size: 16
+  normal:
+    # Go to Folder: /Applications/Utilities/Terminal.app/Contents/Resources/Fonts
+    family: SF Mono
+    style: Regular
+  bold:
+    style: Bold
+  italic:
+    style: Regular Italic
+  offset:
+    x: 1
+    y: 1
+
+key_bindings:
+  # Alt keys: https://github.com/alacritty/alacritty/issues/62#issuecomment-347552058
+  - { key: Key1, mods: Alt, chars: "\e1" }
+  - { key: Key2, mods: Alt, chars: "\e2" }
+  - { key: Key3, mods: Alt, chars: "\e3" }
+  - { key: Key4, mods: Alt, chars: "\e4" }
+  - { key: Key5, mods: Alt, chars: "\e5" }
+  - { key: Key6, mods: Alt, chars: "\e6" }
+  - { key: Key7, mods: Alt, chars: "\e7" }
+  - { key: Key8, mods: Alt, chars: "\e8" }
+  - { key: Key9, mods: Alt, chars: "\e9" }
+  - { key: Key0, mods: Alt, chars: "\e0" }
