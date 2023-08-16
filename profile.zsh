@@ -7,17 +7,17 @@ if [[ -f "${DEVEL_ENV_PATH}/env.zsh" ]]; then
 fi
 
 function change_homebrew_mirror() {
-	pushd "$(brew --repo)"
-	git remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
-	popd
-
-	brew update
 	local content='export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles'
 	if ! grep "${content}" "${DEVEL_ENV_PATH}/env.zsh" &>/dev/null; then
-		echo -e "${content}" >>"${DEVEL_ENV_PATH}/env.zsh"
-	fi
+		pushd "$(brew --repo)"
+		git remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
+		popd
 
-	source "${DEVEL_ENV_PATH}/env.zsh"
+		brew update
+		echo -e "${content}" >>"${DEVEL_ENV_PATH}/env.zsh"
+
+		source "${DEVEL_ENV_PATH}/env.zsh"
+	fi
 }
 
 function setup_path() {
@@ -32,10 +32,11 @@ function setup_path() {
 	done
 
 	local cellars=(
-		tmux
-		nvim
+		gnu-getopt
 		llvm
+		nvim
 		python@3
+		tmux
 	)
 	for cellar in "${cellars[@]}"; do
 		PATH="${HOMEBREW_PREFIX}/opt/${cellar}/bin:${PATH}"
@@ -76,12 +77,20 @@ function setup_config() {
 function install_cellars() {
 	local cellars=(
 		autojump
-		llvm
-		neovim
-		python
-		tmux
+		ccache
+		cmake
 		coreutils
 		git
+		gnu-getopt
+		htop
+		llvm
+		ncurses
+		neovim
+		ninja
+		npm
+		python
+		tmux
+		wget
 	)
 
 	for cellar in "${cellars[@]}"; do
@@ -92,7 +101,7 @@ function install_cellars() {
 }
 
 function install_casks() {
-	local CASKS=(
+	local casks=(
 		alacritty
 		karabiner-elements
 		keka
@@ -102,7 +111,7 @@ function install_casks() {
 		texstudio
 	)
 
-	for cask in "${CASKS[@]}"; do
+	for cask in "${casks[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/Caskroom/${cask}" ]]; then
 			brew install --cask "${cask}"
 		fi
@@ -110,4 +119,7 @@ function install_casks() {
 }
 
 setup_environment
+change_homebrew_mirror
+install_cellars
+install_casks
 setup_config
