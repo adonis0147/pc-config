@@ -87,9 +87,25 @@ EOF
 	fi
 }
 
+function install_for_linux() {
+	if [[ ! -d "${DEVEL_ENV_PATH}" ]]; then
+		git clone https://github.com/adonis0147/pc-devel-env "${DEVEL_ENV_PATH}"
+	fi
+
+	install_zinit
+	setup_zsh
+
+	ln -snf "${DEVEL_ENV_PATH}/Linux/profile.zsh" "${HOME}/.zprofile"
+}
+
 function install() {
-	if [[ "$(uname -s)" == 'Darwin' ]]; then
+	local kernel
+	kernel="$(uname -s)"
+
+	if [[ "${kernel}" == 'Darwin' ]]; then
 		install_for_macos
+	elif [[ "${kernel}" == 'Linux' ]]; then
+		install_for_linux
 	fi
 }
 
