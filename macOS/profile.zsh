@@ -9,7 +9,7 @@ fi
 function change_homebrew_mirror() {
 	local content='export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles'
 	if ! grep "${content}" "${DEVEL_ENV_PATH}/macOS/env.zsh" &>/dev/null; then
-		pushd "$(brew --repo)"
+		pushd "$(brew --repo)" >/dev/null
 		git remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
 		popd
 
@@ -51,16 +51,34 @@ function setup_environment() {
 		export MANPAGER='nvim +Man!'
 	fi
 
-	[[ -s "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh" ]] && \
+	[[ -s "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh" ]] &&
 		source "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh"
 }
 
+function install_terminfo() {
+	local ncurses="ncurses-6.4"
+	pushd /tmp >/dev/null
+	rm -rf "${ncurses}"
+	curl -L "https://ftpmirror.gnu.org/ncurses/${ncurses}.tar.gz" -o - | tar -zxf -
+	mkdir "${ncurses}/build"
+	cd "${ncurses}/build"
+	../configure --prefix="$(pwd)/ncurses" --with-default-terminfo-dir="${DEVEL_ENV_PATH}/terminfo"
+	make -j "$(nproc)"
+	make install
+	popd
+
+	rm -rf "${HOME}/.terminfo"
+	ln -snf "${DEVEL_ENV_PATH}/terminfo" "${HOME}/.terminfo"
+	rm -f "${HOME}/.terminfo/61/{alacritty,alacritty-direct}"
+	ln -snf ${HOMEBREW_PREFIX}/Caskroom/alacritty/*/Alacritty.app/Contents/Resources/61/* "${HOME}/.terminfo/61"
+}
+
 function setup_config() {
-	if [[ ! -h "${HOME}/.alacritty.yml" ]]; then
+	if [[ ! -L "${HOME}/.alacritty.yml" ]]; then
 		ln -snf "${DEVEL_ENV_PATH}/config/alacritty.yml" "${HOME}/.alacritty.yml"
 	fi
 
-	if [[ ! -h "${HOME}/.tmux.conf" ]]; then
+	if [[ ! -L "${HOME}/.tmux.conf" ]]; then
 		ln -snf "${DEVEL_ENV_PATH}/config/tmux.conf" "${HOME}/.tmux.conf"
 	fi
 
@@ -69,6 +87,10 @@ function setup_config() {
 		pushd "${HOME}/.nvim-config" >/dev/null
 		bash "${HOME}/.nvim-config/install.sh"
 		popd >/dev/null
+	fi
+
+	if [[ ! -d "${DEVEL_ENV_PATH}/terminfo" ]]; then
+		install_terminfo
 	fi
 }
 
@@ -82,7 +104,6 @@ function install_cellars() {
 		gnu-getopt
 		htop
 		llvm
-		ncurses
 		neovim
 		ninja
 		npm
