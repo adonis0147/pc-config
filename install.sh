@@ -82,7 +82,7 @@ function install_for_macos() {
 			HOMEBREW_PREFIX='/usr/local'
 		fi
 		cat >"${PC_CONFIG_PATH}/macOS/env.zsh" <<EOF
-export HOMEBREW_PREFIX="${HOMEBREW_PREFIX}"
+export HOMEBREW_PREFIX='${HOMEBREW_PREFIX}'
 EOF
 	fi
 }
