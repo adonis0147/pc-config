@@ -1,9 +1,7 @@
-if [[ -z "${DEVEL_ENV_PATH}" ]]; then
-	readonly DEVEL_ENV_PATH="${HOME}/.local/share/pc-devel-env"
-fi
+readonly PC_CONFIG_PATH="${HOME}/.local/share/pc-config"
 
-if [[ -f "${DEVEL_ENV_PATH}/Linux/env.zsh" ]]; then
-	source "${DEVEL_ENV_PATH}/Linux/env.zsh"
+if [[ -f "${PC_CONFIG_PATH}/Linux/env.zsh" ]]; then
+	source "${PC_CONFIG_PATH}/Linux/env.zsh"
 fi
 
 function setup_path() {

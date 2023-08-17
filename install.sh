@@ -2,7 +2,7 @@
 
 set -e
 
-readonly DEVEL_ENV_PATH="${HOME}/.local/share/pc-devel-env"
+readonly PC_CONFIG_PATH="${HOME}/.local/share/pc-config"
 
 function log() {
 	local level="${1}"
@@ -49,7 +49,7 @@ function install_zinit() {
 }
 
 function setup_zsh() {
-	local content="source \"${DEVEL_ENV_PATH}/zshrc\""
+	local content="source \"${PC_CONFIG_PATH}/zshrc\""
 
 	if [[ ! -f "${HOME}/.zshrc" ]]; then
 		log_error "${HOME}/.zshrc doesn't exist!"
@@ -59,43 +59,43 @@ function setup_zsh() {
 		echo -e "\n${content}" >>"${HOME}/.zshrc"
 	fi
 
-	ln -snf "${DEVEL_ENV_PATH}/config/p10k.zsh" "${HOME}/.p10k.zsh"
+	ln -snf "${PC_CONFIG_PATH}/config/p10k.zsh" "${HOME}/.p10k.zsh"
 }
 
 function install_for_macos() {
 	install_prerequisites
 
-	if [[ ! -d "${DEVEL_ENV_PATH}" ]]; then
-		git clone https://github.com/adonis0147/pc-devel-env "${DEVEL_ENV_PATH}"
+	if [[ ! -d "${PC_CONFIG_PATH}" ]]; then
+		git clone https://github.com/adonis0147/pc-config "${PC_CONFIG_PATH}"
 	fi
 
 	install_zinit
 	setup_zsh
 
-	ln -snf "${DEVEL_ENV_PATH}/macOS/profile.zsh" "${HOME}/.zprofile"
+	ln -snf "${PC_CONFIG_PATH}/macOS/profile.zsh" "${HOME}/.zprofile"
 
-	if [[ ! -f "${DEVEL_ENV_PATH}/macOS/env.zsh" ]]; then
+	if [[ ! -f "${PC_CONFIG_PATH}/macOS/env.zsh" ]]; then
 		local HOMEBREW_PREFIX
 		if [[ "$(uname -m)" == 'arm64' ]]; then
 			HOMEBREW_PREFIX='/opt/homebrew'
 		else
 			HOMEBREW_PREFIX='/usr/local'
 		fi
-		cat >"${DEVEL_ENV_PATH}/macOS/env.zsh" <<EOF
+		cat >"${PC_CONFIG_PATH}/macOS/env.zsh" <<EOF
 export HOMEBREW_PREFIX="${HOMEBREW_PREFIX}"
 EOF
 	fi
 }
 
 function install_for_linux() {
-	if [[ ! -d "${DEVEL_ENV_PATH}" ]]; then
-		git clone https://github.com/adonis0147/pc-devel-env "${DEVEL_ENV_PATH}"
+	if [[ ! -d "${PC_CONFIG_PATH}" ]]; then
+		git clone https://github.com/adonis0147/pc-config "${PC_CONFIG_PATH}"
 	fi
 
 	install_zinit
 	setup_zsh
 
-	ln -snf "${DEVEL_ENV_PATH}/Linux/profile.zsh" "${HOME}/.zprofile"
+	ln -snf "${PC_CONFIG_PATH}/Linux/profile.zsh" "${HOME}/.zprofile"
 }
 
 function install() {
@@ -108,7 +108,7 @@ function install() {
 		install_for_linux
 	fi
 
-	zsh -i -c exit
+	zsh -i -c 'set -e; source "${HOME}/.zprofile"'
 }
 
 install
