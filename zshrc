@@ -49,6 +49,9 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     zsh-defer eval "$(jenv init -)"
 fi
 
+autoload -Uz compinit
+compinit
+
 if command -v kubectl &>/dev/null; then
     source <(kubectl completion zsh)
 fi
@@ -56,9 +59,6 @@ fi
 if command -v minikube &>/dev/null; then
     source <(minikube completion zsh)
 fi
-
-autoload -Uz compinit
-compinit
 
 zinit cdreplay -q
 
