@@ -2,7 +2,7 @@
 
 set -e
 
-readonly PC_CONFIG_PATH="${HOME}/.local/share/pc-config"
+readonly PC_CONFIG_PATH="${HOME}/.config/pc-config"
 
 function log() {
 	local level="${1}"

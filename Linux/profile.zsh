@@ -1,4 +1,4 @@
-readonly PC_CONFIG_PATH="${HOME}/.local/share/pc-config"
+readonly PC_CONFIG_PATH="${HOME}/.config/pc-config"
 
 if [[ -f "${PC_CONFIG_PATH}/Linux/env.zsh" ]]; then
 	source "${PC_CONFIG_PATH}/Linux/env.zsh"
