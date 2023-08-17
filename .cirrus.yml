@@ -1,0 +1,12 @@
+macos_instance:
+  image: ghcr.io/cirruslabs/macos-monterey-base:latest
+
+task:
+  script: |
+    pushd "$(brew --repo)"
+    git fetch
+    git reset --hard origin/master
+    brew update
+    popd
+
+    bash -c "$(curl -L -s 'https://raw.githubusercontent.com/adonis0147/pc-config/main/install.sh')"
