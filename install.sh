@@ -107,6 +107,8 @@ function install() {
 	elif [[ "${kernel}" == 'Linux' ]]; then
 		install_for_linux
 	fi
+
+	zsh -i -c exit
 }
 
 install
