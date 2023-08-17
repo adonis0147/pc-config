@@ -1,6 +1,6 @@
 # pc-config
 
-Personal configurations for development environment.
+Personal configurations for PC.
 
 ## Installation
 
