@@ -49,8 +49,9 @@ function setup_environment() {
 		export MANPAGER='nvim +Man!'
 	fi
 
-	[[ -s "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh" ]] &&
+	if [[ -s "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh" ]]; then
 		source "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh"
+	fi
 }
 
 function install_terminfo() {

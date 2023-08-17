@@ -25,8 +25,9 @@ function setup_environment() {
 		export MANPAGER='nvim +Man!'
 	fi
 
-	[[ -s "${HOME}/.autojump/etc/profile.d/autojump.sh" ]] &&
+	if [[ -s "${HOME}/.autojump/etc/profile.d/autojump.sh" ]]; then
 		source "${HOME}/.autojump/etc/profile.d/autojump.sh"
+	fi
 }
 
 function setup_config() {
