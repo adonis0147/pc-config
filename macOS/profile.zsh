@@ -127,7 +127,6 @@ function install_casks() {
 		mpv
 		scroll-reverser
 		snipaste
-		texstudio
 	)
 
 	for cask in "${casks[@]}"; do
