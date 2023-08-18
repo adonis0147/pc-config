@@ -30,6 +30,17 @@ function setup_environment() {
 	fi
 }
 
+function install_softwares() {
+	if [[ ! -d "${HOME}/.autojump" ]]; then
+		pushd /tmp >/dev/null
+		rm -rf autojump
+		git clone https://github.com/wting/autojump
+		cd autojump
+		python3 install.py
+		popd >/dev/null
+	fi
+}
+
 function setup_config() {
 	if [[ ! -d "${HOME}/.nvim-config" ]]; then
 		git clone https://github.com/adonis0147/nvim-config "${HOME}/.nvim-config"
@@ -40,4 +51,5 @@ function setup_config() {
 }
 
 setup_environment
+install_softwares
 setup_config
