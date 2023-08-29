@@ -5,7 +5,9 @@ if [[ -f "${PC_CONFIG_PATH}/Linux/env.zsh" ]]; then
 fi
 
 function setup_path() {
-	local user_paths=()
+	local user_paths=(
+		"${HOME}/.local/bin"
+	)
 	for p in "${user_paths[@]}"; do
 		PATH="${p}:${PATH}"
 	done
