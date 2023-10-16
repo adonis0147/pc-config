@@ -52,6 +52,10 @@ function setup_environment() {
 	if [[ -s "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh" ]]; then
 		source "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh"
 	fi
+
+	if command -v gtar >/dev/null; then
+		alias tar='gtar'
+	fi
 }
 
 function install_terminfo() {
@@ -101,6 +105,7 @@ function install_cellars() {
 		coreutils
 		git
 		gnu-getopt
+		gnu-tar
 		htop
 		llvm
 		neovim
