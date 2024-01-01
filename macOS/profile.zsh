@@ -77,8 +77,8 @@ function install_terminfo() {
 }
 
 function setup_config() {
-	if [[ ! -L "${HOME}/.alacritty.yml" ]]; then
-		ln -snf "${PC_CONFIG_PATH}/config/alacritty.yml" "${HOME}/.alacritty.yml"
+	if [[ ! -L "${HOME}/.alacritty.toml" ]]; then
+		ln -snf "${PC_CONFIG_PATH}/config/alacritty.toml" "${HOME}/.alacritty.toml"
 	fi
 
 	if [[ ! -L "${HOME}/.tmux.conf" ]]; then
