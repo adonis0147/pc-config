@@ -7,6 +7,7 @@ fi
 function setup_path() {
 	local user_paths=(
 		"${HOME}/.local/bin"
+		"${HOME}/.local/share/nvim/mason/bin"
 	)
 	for p in "${user_paths[@]}"; do
 		PATH="${p}:${PATH}"
