@@ -123,6 +123,7 @@ function install_cellars() {
 		ripgrep
 		tmux
 		wget
+		bash
 		fzf
 	)
 
