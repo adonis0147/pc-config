@@ -81,6 +81,10 @@ function setup_config() {
 		ln -snf "${PC_CONFIG_PATH}/config/alacritty.toml" "${HOME}/.alacritty.toml"
 	fi
 
+	if [[ ! -d "${HOME}/.tmux/plugins/tpm" ]]; then
+		git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
+	fi
+
 	if [[ ! -L "${HOME}/.tmux.conf" ]]; then
 		ln -snf "${PC_CONFIG_PATH}/config/tmux.conf" "${HOME}/.tmux.conf"
 	fi
