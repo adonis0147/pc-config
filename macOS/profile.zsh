@@ -56,10 +56,6 @@ function setup_environment() {
 	if command -v gtar >/dev/null; then
 		alias tar='gtar'
 	fi
-
-	if [[ -f "${HOME}/.fzf.zsh" ]]; then
-		source "${HOME}/.fzf.zsh"
-	fi
 }
 
 function install_terminfo() {
@@ -123,8 +119,6 @@ function install_cellars() {
 		ripgrep
 		tmux
 		wget
-		bash
-		fzf
 	)
 
 	for cellar in "${cellars[@]}"; do
