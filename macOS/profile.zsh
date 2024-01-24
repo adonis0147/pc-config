@@ -99,6 +99,19 @@ function setup_config() {
 	if [[ ! -d "${PC_CONFIG_PATH}/terminfo" ]]; then
 		install_terminfo
 	fi
+
+	if [[ ! -f "${HOME}/.fzf.zsh" ]]; then
+		cat >"${HOME}/.fzf.zsh" <<EOF
+# Auto-completion
+# ---------------
+source "\${HOMEBREW_PREFIX}/opt/fzf/shell/completion.zsh"
+
+# Key bindings
+# ------------
+source "\${HOMEBREW_PREFIX}/opt/fzf/shell/key-bindings.zsh"
+bindkey "^R" history-search-multi-word
+EOF
+	fi
 }
 
 function install_cellars() {
@@ -119,6 +132,7 @@ function install_cellars() {
 		ripgrep
 		tmux
 		wget
+		fzf
 	)
 
 	for cellar in "${cellars[@]}"; do

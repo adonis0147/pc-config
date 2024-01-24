@@ -51,6 +51,21 @@ function setup_config() {
 		bash "${HOME}/.nvim-config/install.sh"
 		popd >/dev/null
 	fi
+
+	if [[ ! -f "${HOME}/.fzf.zsh" ]]; then
+		cat >"${HOME}/.fzf.zsh" <<EOF
+PREFIX='/usr/share/doc/fzf/examples'
+
+# Auto-completion
+# ---------------
+source "\${PREFIX}/completion.zsh"
+
+# Key bindings
+# ------------
+source "\${PREFIX}/key-bindings.zsh"
+bindkey "^R" history-search-multi-word
+EOF
+	fi
 }
 
 setup_environment

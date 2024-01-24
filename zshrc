@@ -64,3 +64,8 @@ zinit cdreplay -q
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Setup fzf
+if command -v fzf &>/dev/null; then
+    [[ ! -f "${HOME}/.fzf.zsh" ]] || source "${HOME}/.fzf.zsh"
+fi
