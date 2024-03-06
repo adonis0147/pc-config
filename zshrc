@@ -1,6 +1,6 @@
 # # .bash_profile
-# if [[ -f "${HOME}/devel/bin/zsh" ]]; then
-#     exec "${HOME}/devel/bin/zsh" -l
+# if [[ -f "${HOME}/.local/share/devel/bin/zsh" ]]; then
+#     exec "${HOME}/.local/share/devel/bin/zsh" -l
 # fi
 
 
