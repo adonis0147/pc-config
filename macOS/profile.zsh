@@ -147,7 +147,7 @@ function install_casks() {
 		alacritty
 		karabiner-elements
 		keka
-		mpv
+		stolendata-mpv
 		scroll-reverser
 		snipaste
 	)
