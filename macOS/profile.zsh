@@ -89,10 +89,10 @@ function setup_config() {
 		ln -snf "${PC_CONFIG_PATH}/config/tmux.conf" "${HOME}/.tmux.conf"
 	fi
 
-	if [[ ! -d "${HOME}/.nvim-config" ]]; then
-		git clone https://github.com/adonis0147/nvim-config "${HOME}/.nvim-config"
-		pushd "${HOME}/.nvim-config" >/dev/null
-		bash "${HOME}/.nvim-config/install.sh"
+	if [[ ! -d "${HOME}/.config/nvim-config" ]]; then
+		git clone https://github.com/adonis0147/nvim-config "${HOME}/.config/nvim-config"
+		pushd "${HOME}/.config/nvim-config" >/dev/null
+		bash "${HOME}/.config/nvim-config/install.sh"
 		popd >/dev/null
 	fi
 
