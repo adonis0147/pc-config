@@ -59,20 +59,26 @@ function setup_environment() {
 }
 
 function install_terminfo() {
+	local terminals=(
+		tmux
+		tmux-256color
+		tmux-direct
+		alacritty+common
+	)
 	local ncurses="ncurses-6.5"
 	pushd /tmp >/dev/null
 	rm -rf "${ncurses}"
 	curl -L "https://ftpmirror.gnu.org/ncurses/${ncurses}.tar.gz" -o - | tar -zxf -
-	mkdir "${ncurses}/build"
-	cd "${ncurses}/build"
-	../configure --prefix="$(pwd)/ncurses" --with-default-terminfo-dir="${PC_CONFIG_PATH}/terminfo"
-	make -j "$(nproc)"
-	make install
+	cd "${ncurses}"
+	tic -x -e "$(
+		IFS=','
+		echo "${terminals[*]}"
+	)" -s -o "${PC_CONFIG_PATH}/terminfo" misc/terminfo.src
 	popd
 
 	rm -rf "${HOME}/.terminfo"
 	ln -snf "${PC_CONFIG_PATH}/terminfo" "${HOME}/.terminfo"
-	rm -f "${HOME}/.terminfo/61/{alacritty,alacritty-direct}"
+	mkdir -p "${HOME}/.terminfo/61"
 	ln -snf ${HOMEBREW_PREFIX}/Caskroom/alacritty/*/Alacritty.app/Contents/Resources/61/* "${HOME}/.terminfo/61"
 }
 
@@ -117,9 +123,11 @@ EOF
 function install_cellars() {
 	local cellars=(
 		autojump
+		bash
 		ccache
 		cmake
 		coreutils
+		fzf
 		git
 		gnu-getopt
 		gnu-tar
@@ -132,7 +140,6 @@ function install_cellars() {
 		ripgrep
 		tmux
 		wget
-		fzf
 	)
 
 	for cellar in "${cellars[@]}"; do
