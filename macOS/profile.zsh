@@ -59,7 +59,7 @@ function setup_environment() {
 }
 
 function install_terminfo() {
-	local ncurses="ncurses-6.4"
+	local ncurses="ncurses-6.5"
 	pushd /tmp >/dev/null
 	rm -rf "${ncurses}"
 	curl -L "https://ftpmirror.gnu.org/ncurses/${ncurses}.tar.gz" -o - | tar -zxf -
