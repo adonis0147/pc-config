@@ -19,6 +19,9 @@ function setup_path() {
 function setup_environment() {
 	setup_path
 
+	export LC_CTYPE='en_US.UTF-8'
+	export TZ='Asia/Shanghai'
+
 	if GPG_TTY="$(tty)"; then
 		export GPG_TTY
 	fi
