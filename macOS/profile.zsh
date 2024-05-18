@@ -182,6 +182,18 @@ function install_pip() {
 	if [[ ! -d "${HOME}/.rye/tools/pip" ]]; then
 		rye install pip
 	fi
+
+	if [[ ! -f "${HOME}/.pip/pip.conf" ]]; then
+		mkdir -p "${HOME}/.pip"
+
+		cat >"${HOME}/.pip/pip.conf" <<EOF
+[global]
+index-url = http://mirrors.aliyun.com/pypi/simple/
+
+[install]
+trusted-host=mirrors.aliyun.com
+EOF
+	fi
 }
 
 setup_environment
