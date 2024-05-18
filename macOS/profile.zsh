@@ -32,7 +32,6 @@ function setup_path() {
 	local cellars=(
 		gnu-getopt
 		llvm
-		python
 	)
 	for cellar in "${cellars[@]}"; do
 		PATH="${HOMEBREW_PREFIX}/opt/${cellar}/bin:${PATH}"
@@ -174,9 +173,9 @@ function install_rye() {
 				mv "${config_file}.tmp" "${config_file}"
 			fi
 		fi
-	else
-		source "${HOME}/.rye/env"
 	fi
+
+	export PATH="${HOME}/.rye/shims:${PATH}"
 }
 
 function install_pip() {
