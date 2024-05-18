@@ -32,7 +32,7 @@ function setup_path() {
 	local cellars=(
 		gnu-getopt
 		llvm
-		python@3
+		python
 	)
 	for cellar in "${cellars[@]}"; do
 		PATH="${HOMEBREW_PREFIX}/opt/${cellar}/bin:${PATH}"
@@ -160,8 +160,35 @@ function install_casks() {
 	done
 }
 
+function install_rye() {
+	if [[ ! -d "${HOME}/.rye" ]]; then
+		curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
+
+		local config_file="${HOME}/.rye/config.toml"
+		if [[ -f "${config_file}" ]]; then
+			local line='use-uv = true'
+			if ! grep "${line}" "${config_file}" &>/dev/null; then
+				sed '/\[behavior\]/ a \
+'"${line}"'
+				' "${config_file}" >"${config_file}.tmp"
+				mv "${config_file}.tmp" "${config_file}"
+			fi
+		fi
+	else
+		source "${HOME}/.rye/env"
+	fi
+}
+
+function install_pip() {
+	if [[ ! -d "${HOME}/.rye/tools/pip" ]]; then
+		rye install pip
+	fi
+}
+
 setup_environment
 change_homebrew_mirror
 install_cellars
 install_casks
+install_rye
+install_pip
 setup_config
