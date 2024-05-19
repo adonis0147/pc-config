@@ -163,16 +163,7 @@ function install_rye() {
 	if [[ ! -d "${HOME}/.rye" ]]; then
 		curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
 
-		local config_file="${HOME}/.rye/config.toml"
-		if [[ -f "${config_file}" ]]; then
-			local line='use-uv = true'
-			if ! grep "${line}" "${config_file}" &>/dev/null; then
-				sed '/\[behavior\]/ a \
-'"${line}"'
-				' "${config_file}" >"${config_file}.tmp"
-				mv "${config_file}.tmp" "${config_file}"
-			fi
-		fi
+		rye config --set-bool behavior.use-uv=true
 	fi
 
 	export PATH="${HOME}/.rye/shims:${PATH}"
