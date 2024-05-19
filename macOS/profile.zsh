@@ -111,6 +111,18 @@ source "\${HOMEBREW_PREFIX}/opt/fzf/shell/key-bindings.zsh"
 bindkey "^R" history-search-multi-word
 EOF
 	fi
+
+	if [[ ! -f "${HOME}/.pip/pip.conf" ]]; then
+		mkdir -p "${HOME}/.pip"
+
+		cat >"${HOME}/.pip/pip.conf" <<EOF
+[global]
+index-url = http://mirrors.aliyun.com/pypi/simple/
+
+[install]
+trusted-host=mirrors.aliyun.com
+EOF
+	fi
 }
 
 function install_cellars() {
@@ -160,31 +172,16 @@ function install_casks() {
 }
 
 function install_rye() {
+	export PATH="${HOME}/.rye/shims:${PATH}"
+
 	if [[ ! -d "${HOME}/.rye" ]]; then
 		curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
 
 		rye config --set-bool behavior.use-uv=true
 	fi
 
-	export PATH="${HOME}/.rye/shims:${PATH}"
-}
-
-function install_pip() {
-	if [[ ! -d "${HOME}/.rye/tools/pip" ]]; then
-		rye install pip
-	fi
-
-	if [[ ! -f "${HOME}/.pip/pip.conf" ]]; then
-		mkdir -p "${HOME}/.pip"
-
-		cat >"${HOME}/.pip/pip.conf" <<EOF
-[global]
-index-url = http://mirrors.aliyun.com/pypi/simple/
-
-[install]
-trusted-host=mirrors.aliyun.com
-EOF
-	fi
+	alias pip='python -m pip'
+	alias pip3='python3 -m pip'
 }
 
 setup_environment
@@ -192,5 +189,4 @@ change_homebrew_mirror
 install_cellars
 install_casks
 install_rye
-install_pip
 setup_config
