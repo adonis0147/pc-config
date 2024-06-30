@@ -155,14 +155,21 @@ function install_cellars() {
 }
 
 function install_casks() {
+	local macos_version
+	macos_version="$(sw_vers -productVersion)"
+	local major_version
+	major_version="${macos_version%%.*}"
+
 	local casks=(
 		alacritty
 		karabiner-elements
 		keka
 		stolendata-mpv
-		scroll-reverser
 		snipaste
 	)
+	if [[ "${major_version}" -ge 13 ]]; then
+		casks+=(scroll-reverser)
+	fi
 
 	for cask in "${casks[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/Caskroom/${cask}" ]]; then
