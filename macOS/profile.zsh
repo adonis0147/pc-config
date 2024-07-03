@@ -5,16 +5,22 @@ if [[ -f "${PC_CONFIG_PATH}/macOS/env.zsh" ]]; then
 fi
 
 function change_homebrew_mirror() {
-	local content="export HOMEBREW_BOTTLE_DOMAIN='https://mirrors.aliyun.com/homebrew/homebrew-bottles'"
-	if ! grep "${content}" "${PC_CONFIG_PATH}/macOS/env.zsh" &>/dev/null; then
-		pushd "$(brew --repo)" >/dev/null
-		git remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
-		popd
+	local contents=(
+		"export HOMEBREW_API_DOMAIN='https://mirrors.aliyun.com/homebrew-bottles/api'"
+		"export HOMEBREW_BOTTLE_DOMAIN='https://mirrors.aliyun.com/homebrew/homebrew-bottles'"
+	)
 
-		brew update
-		echo -e "${content}" >>"${PC_CONFIG_PATH}/macOS/env.zsh"
+	local changed=false
+	for content in "${contents[@]}"; do
+		if ! grep "${content}" "${PC_CONFIG_PATH}/macOS/env.zsh" &>/dev/null; then
+			echo -e "${content}" >>"${PC_CONFIG_PATH}/macOS/env.zsh"
+			changed=true
+		fi
+	done
 
+	if "${changed}"; then
 		source "${PC_CONFIG_PATH}/macOS/env.zsh"
+		brew update
 	fi
 }
 
