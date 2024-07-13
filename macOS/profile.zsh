@@ -77,15 +77,9 @@ function install_terminfo() {
 
 	rm -rf "${HOME}/.terminfo"
 	ln -snf "${PC_CONFIG_PATH}/terminfo" "${HOME}/.terminfo"
-	rm -f "${HOME}/.terminfo/61/{alacritty,alacritty-direct}"
-	ln -snf ${HOMEBREW_PREFIX}/Caskroom/alacritty/*/Alacritty.app/Contents/Resources/61/* "${HOME}/.terminfo/61"
 }
 
 function setup_config() {
-	if [[ ! -L "${HOME}/.alacritty.toml" ]]; then
-		ln -snf "${PC_CONFIG_PATH}/config/alacritty.toml" "${HOME}/.alacritty.toml"
-	fi
-
 	if [[ ! -L "${HOME}/.wezterm.lua" ]]; then
 		ln -snf "${PC_CONFIG_PATH}/config/wezterm.lua" "${HOME}/.wezterm.lua"
 	fi
@@ -171,7 +165,6 @@ function install_casks() {
 	major_version="${macos_version%%.*}"
 
 	local casks=(
-		alacritty
 		karabiner-elements
 		keka
 		snipaste
