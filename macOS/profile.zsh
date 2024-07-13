@@ -86,9 +86,8 @@ function setup_config() {
 		ln -snf "${PC_CONFIG_PATH}/config/alacritty.toml" "${HOME}/.alacritty.toml"
 	fi
 
-	if [[ ! -L "${HOME}/.config/kitty/kitty.conf" ]]; then
-		mkdir -p "${HOME}/.config/kitty"
-		ln -snf "${PC_CONFIG_PATH}/config/kitty.conf" "${HOME}/.config/kitty/kitty.conf"
+	if [[ ! -L "${HOME}/.wezterm.lua" ]]; then
+		ln -snf "${PC_CONFIG_PATH}/config/wezterm.lua" "${HOME}/.wezterm.lua"
 	fi
 
 	if [[ ! -d "${HOME}/.tmux/plugins/tpm" ]]; then
@@ -175,8 +174,9 @@ function install_casks() {
 		alacritty
 		karabiner-elements
 		keka
-		stolendata-mpv
 		snipaste
+		stolendata-mpv
+		wezterm
 	)
 	if [[ "${major_version}" -ge 13 ]]; then
 		casks+=(scroll-reverser)
