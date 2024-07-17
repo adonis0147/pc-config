@@ -41,6 +41,18 @@ function install_prerequisites() {
 	fi
 }
 
+function install_zsh() {
+	if ! command -v zsh &>/dev/null; then
+		local OS_DISTRIBUTOR
+		OS_DISTRIBUTOR="$(lsb_release -a | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
+
+		if [[ "${OS_DISTRIBUTOR}" == 'Ubuntu' ]]; then
+			sudo apt update
+			sudo DEBIAN_FRONTEND=noninteractive apt install --yes zsh
+		fi
+	fi
+}
+
 function install_zinit() {
 	if [[ ! -d "${HOME}/.local/share/zinit/zinit.git" ]]; then
 		yes | bash -c "$(curl --fail --show-error --silent --location \
@@ -92,10 +104,19 @@ function install_for_linux() {
 		git clone https://github.com/adonis0147/pc-config "${PC_CONFIG_PATH}"
 	fi
 
+	install_zsh
 	install_zinit
 	setup_zsh
 
 	ln -snf "${PC_CONFIG_PATH}/Linux/profile.zsh" "${HOME}/.zprofile"
+
+	if [[ ! -f "${PC_CONFIG_PATH}/Linux/env.zsh" ]]; then
+		local OS_DISTRIBUTOR
+		OS_DISTRIBUTOR="$(lsb_release -a | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
+		cat >"${PC_CONFIG_PATH}/Linux/env.zsh" <<EOF
+export OS_DISTRIBUTOR='${OS_DISTRIBUTOR}'
+EOF
+	fi
 }
 
 function install() {

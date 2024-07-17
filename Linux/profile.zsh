@@ -71,6 +71,14 @@ EOF
 	fi
 }
 
+function setup_for_specific_os() {
+	local file="${PC_CONFIG_PATH}/Linux/${OS_DISTRIBUTOR}.zsh"
+	if [[ -f "${file}" ]]; then
+		source "${file}"
+	fi
+}
+
 setup_environment
 install_softwares
 setup_config
+setup_for_specific_os
