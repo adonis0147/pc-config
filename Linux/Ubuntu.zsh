@@ -11,7 +11,7 @@ function setup_environment() {
 
 function install_packages() {
 	local installed
-	installed="$(apt list --installed)"
+	installed="$(apt list --installed 2>/dev/null)"
 	local packages=(
 		'fzf'
 	)
