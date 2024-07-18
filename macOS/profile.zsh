@@ -165,6 +165,7 @@ function install_casks() {
 	major_version="${macos_version%%.*}"
 
 	local casks=(
+		font-sf-mono
 		karabiner-elements
 		keka
 		snipaste
