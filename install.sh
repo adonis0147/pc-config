@@ -44,7 +44,7 @@ function install_prerequisites() {
 function install_zsh() {
 	if ! command -v zsh &>/dev/null; then
 		local OS_DISTRIBUTOR
-		OS_DISTRIBUTOR="$(lsb_release -a | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
+		OS_DISTRIBUTOR="$(lsb_release -a 2>/dev/null | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
 
 		if [[ "${OS_DISTRIBUTOR}" == 'Ubuntu' ]]; then
 			sudo apt update
@@ -112,7 +112,7 @@ function install_for_linux() {
 
 	if [[ ! -f "${PC_CONFIG_PATH}/Linux/env.zsh" ]]; then
 		local OS_DISTRIBUTOR
-		OS_DISTRIBUTOR="$(lsb_release -a | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
+		OS_DISTRIBUTOR="$(lsb_release -a 2>/dev/null | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
 		cat >"${PC_CONFIG_PATH}/Linux/env.zsh" <<EOF
 export OS_DISTRIBUTOR='${OS_DISTRIBUTOR}'
 EOF

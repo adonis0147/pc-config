@@ -187,7 +187,7 @@ function install_rye() {
 	export PATH="${HOME}/.rye/shims:${PATH}"
 
 	if [[ ! -d "${HOME}/.rye" ]]; then
-		curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
+		curl -sSL https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
 
 		rye config --set-bool behavior.use-uv=true
 	fi

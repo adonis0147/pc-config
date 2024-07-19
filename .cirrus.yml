@@ -1,12 +1,35 @@
-macos_instance:
-  image: ghcr.io/cirruslabs/macos-sonoma-base:latest
+macos_task:
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-sonoma-base:latest
 
-task:
+  clone_script: |
+    git clone -b "${CIRRUS_BRANCH}" https://github.com/adonis0147/pc-config "${HOME}/.config/pc-config"
+
   script: |
-    pushd "$(brew --repo)"
-    git fetch
-    git reset --hard origin/master
-    brew update
-    popd
+    cd "${HOME}/.config/pc-config"
+    bash install.sh
 
-    bash -c "$(curl -L -s 'https://raw.githubusercontent.com/adonis0147/pc-config/main/install.sh')"
+linux_task:
+  compute_engine_instance:
+    platform: linux
+    image_project: cirrus-images
+    image: family/docker-builder
+
+  clone_script: |
+    git clone -b "${CIRRUS_BRANCH}" https://github.com/adonis0147/pc-config "${HOME}/.config/pc-config"
+
+  script: |
+    cd "${HOME}/.config"
+
+    cat >Dockerfile <<EOF
+    FROM ubuntu:24.04
+    RUN apt-get update
+    RUN apt-get install --assume-yes curl git lsb-release sudo python3
+    ENV SHELL=bash
+    CMD ["/bin/bash"]
+    EOF
+
+    docker build -t pc-config .
+    sed -i 's/^install_snaps/# install_snaps/' pc-config/Linux/Ubuntu.zsh
+    docker run --rm --mount=type=bind,source="$(pwd)/pc-config",target=/root/.config/pc-config pc-config \
+      bash -c 'cd /root/.config/pc-config; bash install.sh'
