@@ -80,8 +80,9 @@ function install_terminfo() {
 }
 
 function setup_config() {
-	if [[ ! -L "${HOME}/.wezterm.lua" ]]; then
-		ln -snf "${PC_CONFIG_PATH}/config/wezterm.lua" "${HOME}/.wezterm.lua"
+	if [[ ! -L "${HOME}/.config/wezterm/wezterm.lua" ]]; then
+		mkdir -p "${HOME}/.config/wezterm"
+		ln -snf "${PC_CONFIG_PATH}/config/wezterm.lua" "${HOME}/.config/wezterm/wezterm.lua"
 	fi
 
 	if [[ ! -d "${HOME}/.tmux/plugins/tpm" ]]; then
