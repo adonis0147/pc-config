@@ -57,16 +57,18 @@ function setup_config() {
 
 	if [[ ! -f "${HOME}/.fzf.zsh" ]]; then
 		cat >"${HOME}/.fzf.zsh" <<EOF
-PREFIX='/usr/share/doc/fzf/examples'
+FZF_PREFIX='/usr/share/doc/fzf/examples'
 
 # Auto-completion
 # ---------------
-source "\${PREFIX}/completion.zsh"
+source "\${FZF_PREFIX}/completion.zsh"
 
 # Key bindings
 # ------------
-source "\${PREFIX}/key-bindings.zsh"
+source "\${FZF_PREFIX}/key-bindings.zsh"
 bindkey "^R" history-search-multi-word
+
+unset FZF_PREFIX
 EOF
 	fi
 }
