@@ -39,6 +39,7 @@ EOF
 		'build-essential'
 		'fzf'
 		'ripgrep'
+		'unzip'
 	)
 
 	for package in "${packages[@]}"; do
