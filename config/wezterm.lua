@@ -26,10 +26,19 @@ local setup_for_apple = function(config)
 	}
 end
 
+local setup_for_windows = function(config)
+	for _, domain in ipairs(wezterm.default_wsl_domains()) do
+		config.default_domain = domain.name
+		break
+	end
+end
+
 local setup_for_specific_os = function(config)
 	local os_type = get_os_type()
 	if os_type == 'apple' then
 		setup_for_apple(config)
+	elseif os_type == 'windows' then
+		setup_for_windows(config)
 	end
 end
 
