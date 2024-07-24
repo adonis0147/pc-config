@@ -1,6 +1,7 @@
 function setup_environment() {
 	local user_paths=(
 		'/snap/bin'
+		'/usr/lib/llvm-18/bin'
 	)
 	for p in "${user_paths[@]}"; do
 		PATH="${p}:${PATH}"
@@ -10,9 +11,25 @@ function setup_environment() {
 }
 
 function install_packages() {
+	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
+		curl -q https://apt.llvm.org/llvm-snapshot.gpg.key -o - | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+		sudo apt update
+	fi
+
 	local installed
 	installed="$(apt list --installed 2>/dev/null)"
+	local llvm_version='18'
 	local packages=(
+		"clang-${llvm_version}"
+		"clang-format-${llvm_version}"
+		"clang-tidy-${llvm_version}"
+		"clang-tools-${llvm_version}"
+		"clangd-${llvm_version}"
+		"libc++-${llvm_version}-dev"
+		"libc++abi-${llvm_version}-dev"
+		"lld-${llvm_version}"
+		"lldb-${llvm_version}"
+		'build-essential'
 		'fzf'
 	)
 
