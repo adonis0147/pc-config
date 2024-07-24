@@ -33,7 +33,7 @@ zinit cdclear -q # <- forget completions provided up to this moment
 
 
 # Load powerlevel10k theme
-zinit ice depth"1" # git clone depth
+zinit ice depth'1' # git clone depth
 zinit light romkatv/powerlevel10k
 
 zinit light zsh-users/zsh-autosuggestions
@@ -41,16 +41,21 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light zdharma-continuum/history-search-multi-word
 zinit light romkatv/zsh-defer
 
-if [[ "$(uname -s)" == 'Darwin' ]]; then
-    zinit ice as'command' pick'bin/jenv' id-as \
-        atclone'ln -snf "${HOME}/.local/share/zinit/plugins/jenv" "${HOME}/.jenv"'
-    zinit light @jenv/jenv
+zinit ice cloneopts'' pullopts'' as'command' pick'bin/jenv' id-as \
+    atclone'ln -snf "${HOME}/.local/share/zinit/plugins/jenv" "${HOME}/.jenv"'
+zinit light @jenv/jenv
+zsh-defer eval "$(jenv init -)"
 
-    zsh-defer eval "$(jenv init -)"
+if [[ "$(uname -s)" == 'Linux' ]]; then
+    zinit ice cloneopts'' pullopts'' pick'nvm.sh' id-as \
+        atclone'ln -snf "${HOME}/.local/share/zinit/plugins/nvm" "${HOME}/.nvm"'
+    zinit light nvm-sh/nvm
 fi
 
 autoload -Uz compinit
 compinit
+
+[[ ! -f "${HOME}/.nvm/bash_completion" ]] || source "${HOME}/.nvm/bash_completion"
 
 if command -v kubectl &>/dev/null; then
     source <(kubectl completion zsh)
