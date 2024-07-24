@@ -15,7 +15,7 @@ function install_packages() {
 	local llvm_version='18'
 	local codename="$(lsb_release -cs 2>/dev/null)"
 	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
-		curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o - | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+		sudo curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc 2>/dev/null
 		cat >/tmp/llvm-toolchain.list <<EOF
 deb http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
 deb-src http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
@@ -38,6 +38,7 @@ EOF
 		"lldb-${llvm_version}"
 		'build-essential'
 		'fzf'
+		'openconnect'
 		'ripgrep'
 		'unzip'
 	)
