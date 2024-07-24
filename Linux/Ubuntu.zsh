@@ -1,7 +1,8 @@
 function setup_environment() {
+	local llvm_version='18'
 	local user_paths=(
 		'/snap/bin'
-		'/usr/lib/llvm-18/bin'
+		"/usr/lib/llvm-${llvm_version}/bin"
 	)
 	for p in "${user_paths[@]}"; do
 		PATH="${p}:${PATH}"
@@ -12,7 +13,7 @@ function setup_environment() {
 
 function install_packages() {
 	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
-		curl -q https://apt.llvm.org/llvm-snapshot.gpg.key -o - | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+		curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o - | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
 		sudo apt update
 	fi
 
@@ -31,10 +32,11 @@ function install_packages() {
 		"lldb-${llvm_version}"
 		'build-essential'
 		'fzf'
+		'ripgrep'
 	)
 
 	for package in "${packages[@]}"; do
-		if ! echo "${installed}" | grep -E "^${package}/" &>/dev/null; then
+		if ! echo "${installed}" | grep -E "^${package//+/\\+}/" &>/dev/null; then
 			sudo DEBIAN_FRONTEND=noninteractive apt install --yes "${package}"
 		fi
 	done
