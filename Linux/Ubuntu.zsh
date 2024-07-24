@@ -12,14 +12,20 @@ function setup_environment() {
 }
 
 function install_packages() {
+	local llvm_version='18'
+	local codename="$(lsb_release -cs 2>/dev/null)"
 	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
 		curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o - | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+		cat >/tmp/llvm-toolchain.list <<EOF
+deb http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
+deb-src http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
+EOF
+		sudo mv /tmp/llvm-toolchain.list /etc/apt/sources.list.d/
 		sudo apt update
 	fi
 
 	local installed
 	installed="$(apt list --installed 2>/dev/null)"
-	local llvm_version='18'
 	local packages=(
 		"clang-${llvm_version}"
 		"clang-format-${llvm_version}"
