@@ -28,6 +28,7 @@ function setup_environment() {
 
 	if command -v nvim >/dev/null; then
 		export EDITOR='nvim'
+		# On Ubuntu: sudo apt install apparmor-utils && sudo aa-disable /usr/bin/man
 		export MANPAGER='nvim +Man!'
 	fi
 
@@ -61,12 +62,14 @@ FZF_PREFIX='/usr/share/doc/fzf/examples'
 
 # Auto-completion
 # ---------------
-source "\${FZF_PREFIX}/completion.zsh"
+[[ ! -f "\${FZF_PREFIX}/completion.zsh" ]] || source "\${FZF_PREFIX}/completion.zsh"
 
 # Key bindings
 # ------------
-source "\${FZF_PREFIX}/key-bindings.zsh"
-bindkey "^R" history-search-multi-word
+if [[ -f "\${FZF_PREFIX}/key-bindings.zsh" ]]; then
+	source "\${FZF_PREFIX}/key-bindings.zsh"
+	bindkey "^R" history-search-multi-word
+fi
 
 unset FZF_PREFIX
 EOF
