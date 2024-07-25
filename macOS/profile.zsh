@@ -104,19 +104,6 @@ function setup_config() {
 		install_terminfo
 	fi
 
-	if [[ ! -f "${HOME}/.fzf.zsh" ]]; then
-		cat >"${HOME}/.fzf.zsh" <<EOF
-# Auto-completion
-# ---------------
-source "\${HOMEBREW_PREFIX}/opt/fzf/shell/completion.zsh"
-
-# Key bindings
-# ------------
-source "\${HOMEBREW_PREFIX}/opt/fzf/shell/key-bindings.zsh"
-bindkey "^R" history-search-multi-word
-EOF
-	fi
-
 	if [[ ! -f "${HOME}/.pip/pip.conf" ]]; then
 		mkdir -p "${HOME}/.pip"
 
@@ -137,7 +124,6 @@ function install_cellars() {
 		ccache
 		cmake
 		coreutils
-		fzf
 		git
 		gnu-getopt
 		gnu-tar
@@ -147,7 +133,6 @@ function install_cellars() {
 		ninja
 		npm
 		python
-		ripgrep
 		tmux
 		wget
 	)

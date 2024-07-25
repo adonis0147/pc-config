@@ -117,6 +117,14 @@ function install_for_linux() {
 export OS_DISTRIBUTOR='${OS_DISTRIBUTOR}'
 EOF
 	fi
+
+	if [[ "${OS_DISTRIBUTOR}" == 'Ubuntu' ]]; then
+		# https://github.com/zdharma-continuum/zinit?tab=readme-ov-file#disabling-system-wide-compinit-call-ubuntu
+		local content='skip_global_compinit=1'
+		if [[ ! -f "${HOME}/.zshenv" ]] || ! grep "${content}" "${HOME}/.zshenv" &>/dev/null; then
+			echo "${content}" >>"${HOME}/.zshenv"
+		fi
+	fi
 }
 
 function install() {

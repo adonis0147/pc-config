@@ -55,25 +55,6 @@ function setup_config() {
 		bash "${HOME}/.config/nvim-config/install.sh"
 		popd >/dev/null
 	fi
-
-	if [[ ! -f "${HOME}/.fzf.zsh" ]]; then
-		cat >"${HOME}/.fzf.zsh" <<EOF
-FZF_PREFIX='/usr/share/doc/fzf/examples'
-
-# Auto-completion
-# ---------------
-[[ ! -f "\${FZF_PREFIX}/completion.zsh" ]] || source "\${FZF_PREFIX}/completion.zsh"
-
-# Key bindings
-# ------------
-if [[ -f "\${FZF_PREFIX}/key-bindings.zsh" ]]; then
-	source "\${FZF_PREFIX}/key-bindings.zsh"
-	bindkey "^R" history-search-multi-word
-fi
-
-unset FZF_PREFIX
-EOF
-	fi
 }
 
 function setup_for_specific_os() {
