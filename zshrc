@@ -14,22 +14,25 @@ fi
 zstyle ':omz:lib:theme-and-appearance' gnu-ls yes
 
 omz_libraries=(
-    theme-and-appearance
     key-bindings
     history
-    completion
-    directories
-    git
-    grep
 )
 
 for library in "${omz_libraries[@]}"; do
     zinit snippet "OMZL::${library}.zsh"
 done
 
+zinit wait lucid for \
+    'OMZL::theme-and-appearance.zsh' \
+    'OMZL::completion.zsh' \
+    'OMZL::directories.zsh' \
+    'OMZL::git.zsh' \
+    'OMZL::grep.zsh'
+
 # Load Git plugin from OMZ
+zinit ice wait lucid \
+    atload'zinit cdclear -q' # <- forget completions provided up to this moment
 zinit snippet OMZP::git
-zinit cdclear -q # <- forget completions provided up to this moment
 
 
 # Load powerlevel10k theme
@@ -40,7 +43,7 @@ zinit light romkatv/powerlevel10k
 
 zinit light romkatv/zsh-defer
 
-zinit ice blockf
+zinit ice wait lucid blockf atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
 
 zinit wait lucid for \
