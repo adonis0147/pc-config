@@ -59,7 +59,8 @@ zinit light nvm-sh/nvm
 
 
 # Load programs
-zinit ice wait lucid from'gh-r' as'program' atclone'./fzf --zsh >init.zsh' src'init.zsh'
+zinit ice wait lucid from'gh-r' as'program' \
+    atclone'./fzf --zsh >init.zsh; echo -e "\nbindkey \"^R\" history-search-multi-word" >>init.zsh' src'init.zsh'
 zinit light junegunn/fzf
 
 zinit ice wait lucid reset from'gh-r' as'program' completions='complete/_rg' \
