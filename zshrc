@@ -59,10 +59,10 @@ zinit light nvm-sh/nvm
 
 
 # Load programs
-zinit ice from'gh-r' as'program' atclone'./fzf --zsh >init.zsh' src'init.zsh'
+zinit ice wait lucid from'gh-r' as'program' atclone'./fzf --zsh >init.zsh' src'init.zsh'
 zinit light junegunn/fzf
 
-zinit ice reset from'gh-r' as'program' completions='complete/_rg' \
+zinit ice wait lucid reset from'gh-r' as'program' completions='complete/_rg' \
     atclone'folder="$(find . -mindepth 1 -maxdepth 1 -type d -name "ripgrep-*")"; mv "${folder}"/* .; rmdir "${folder}"'
 zinit light BurntSushi/ripgrep
 

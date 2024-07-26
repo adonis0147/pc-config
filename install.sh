@@ -86,16 +86,15 @@ function install_for_macos() {
 
 	ln -snf "${PC_CONFIG_PATH}/macOS/profile.zsh" "${HOME}/.zprofile"
 
-	if [[ ! -f "${PC_CONFIG_PATH}/macOS/env.zsh" ]]; then
-		local HOMEBREW_PREFIX
-		if [[ "$(uname -m)" == 'arm64' ]]; then
-			HOMEBREW_PREFIX='/opt/homebrew'
-		else
-			HOMEBREW_PREFIX='/usr/local'
-		fi
-		cat >"${PC_CONFIG_PATH}/macOS/env.zsh" <<EOF
-export HOMEBREW_PREFIX='${HOMEBREW_PREFIX}'
-EOF
+	local HOMEBREW_PREFIX
+	if [[ "$(uname -m)" == 'arm64' ]]; then
+		HOMEBREW_PREFIX='/opt/homebrew'
+	else
+		HOMEBREW_PREFIX='/usr/local'
+	fi
+	local content="export HOMEBREW_PREFIX='${HOMEBREW_PREFIX}'"
+	if ! grep "${content}" "${PC_CONFIG_PATH}/macOS/env.zsh" &>/dev/null; then
+		echo "${content}" >>"${PC_CONFIG_PATH}/macOS/env.zsh"
 	fi
 }
 
@@ -110,19 +109,26 @@ function install_for_linux() {
 
 	ln -snf "${PC_CONFIG_PATH}/Linux/profile.zsh" "${HOME}/.zprofile"
 
-	if [[ ! -f "${PC_CONFIG_PATH}/Linux/env.zsh" ]]; then
-		local OS_DISTRIBUTOR
-		OS_DISTRIBUTOR="$(lsb_release -a 2>/dev/null | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
-		cat >"${PC_CONFIG_PATH}/Linux/env.zsh" <<EOF
-export OS_DISTRIBUTOR='${OS_DISTRIBUTOR}'
-EOF
+	local OS_DISTRIBUTOR
+	OS_DISTRIBUTOR="$(lsb_release -a 2>/dev/null | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
+	local content="export OS_DISTRIBUTOR='${OS_DISTRIBUTOR}'"
+	if ! grep "${content}" "${PC_CONFIG_PATH}/Linux/env.zsh" &>/dev/null; then
+		echo "${content}" >>"${PC_CONFIG_PATH}/Linux/env.zsh"
 	fi
 
 	if [[ "${OS_DISTRIBUTOR}" == 'Ubuntu' ]]; then
 		# https://github.com/zdharma-continuum/zinit?tab=readme-ov-file#disabling-system-wide-compinit-call-ubuntu
-		local content='skip_global_compinit=1'
-		if [[ ! -f "${HOME}/.zshenv" ]] || ! grep "${content}" "${HOME}/.zshenv" &>/dev/null; then
-			echo "${content}" >>"${HOME}/.zshenv"
+		content='skip_global_compinit=1'
+		if ! grep "${content}" "${HOME}/.zshenv" &>/dev/null; then
+			echo -e "\n${content}" >>"${HOME}/.zshenv"
+		fi
+	fi
+
+	local file="${PC_CONFIG_PATH}/Linux/${OS_DISTRIBUTOR}.zsh"
+	if [[ -f "${file}" ]]; then
+		content="source '${file}'"
+		if ! grep "${content}" "${PC_CONFIG_PATH}/Linux/env.zsh" &>/dev/null; then
+			echo -e "\n${content}" >>"${PC_CONFIG_PATH}/Linux/env.zsh"
 		fi
 	fi
 }
