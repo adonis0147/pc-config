@@ -67,7 +67,7 @@ zinit ice wait lucid from'gh-r' as'program' \
     atpull'%atclone'
 zinit light junegunn/fzf
 
-zinit ice wait lucid reset from'gh-r' as'program' completions='complete/_rg' \
+zinit ice wait lucid from'gh-r' as'program' completions='complete/_rg' \
     atclone'folder="$(find . -mindepth 1 -maxdepth 1 -type d -name "ripgrep-*")"; mv "${folder}"/* .; rmdir "${folder}"' \
     atpull'%atclone'
 zinit light BurntSushi/ripgrep
