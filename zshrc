@@ -35,13 +35,15 @@ zinit ice wait lucid \
 zinit snippet OMZP::git
 
 
-# Load powerlevel10k theme
-zinit ice depth'1' # git clone depth
-zinit light romkatv/powerlevel10k
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
+# Load plugins
 zinit light romkatv/zsh-defer
+
+# Load powerlevel10k theme
+PS1=''
+zinit ice wait'!' lucid nocd \
+    atload'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh; _p9k_precmd' \
+    depth'1' # git clone depth
+zinit light romkatv/powerlevel10k
 
 zinit ice wait lucid blockf atload'_zsh_autosuggest_start'
 zinit light zsh-users/zsh-autosuggestions
