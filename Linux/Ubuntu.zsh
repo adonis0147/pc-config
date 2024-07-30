@@ -37,6 +37,7 @@ EOF
 		"lld-${llvm_version}"
 		"lldb-${llvm_version}"
 		'build-essential'
+		'gdb'
 		'openconnect'
 		'unzip'
 	)
