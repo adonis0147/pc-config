@@ -15,6 +15,7 @@ end
 local setup_common = function(config)
 	config.audible_bell   = 'Disabled'
 	config.enable_tab_bar = false
+	config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 	config.color_scheme   = 'Monokai (dark) (terminal.sexy)'
 	config.font_size      = 16.0
 end
