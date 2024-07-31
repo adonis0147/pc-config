@@ -36,9 +36,15 @@ EOF
 		"libc++abi-${llvm_version}-dev"
 		"lld-${llvm_version}"
 		"lldb-${llvm_version}"
+		'autoconf'
 		'build-essential'
+		'ccache'
+		'cmake'
 		'gdb'
+		'libtool-bin'
+		'ninja-build'
 		'openconnect'
+		'pkg-config'
 		'unzip'
 	)
 
