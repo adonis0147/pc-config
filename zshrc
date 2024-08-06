@@ -76,6 +76,9 @@ zinit light BurntSushi/ripgrep
 
 
 # Completions
+zsh-defer zicompinit
+zsh-defer zicdreplay
+
 if command -v kubectl &>/dev/null; then
     if [[ ! -f "${HOME}/.local/share/completions/kubectl_completion" ]]; then
         mkdir -p "${HOME}/.local/share/completions"
