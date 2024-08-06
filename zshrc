@@ -69,28 +69,33 @@ zinit ice wait lucid from'gh-r' as'program' \
     atpull'%atclone'
 zinit light junegunn/fzf
 
-zinit ice wait lucid from'gh-r' as'program' completions='complete/_rg' \
+zinit ice wait lucid from'gh-r' as'program' completions'complete/_rg' \
     atclone'folder="$(find . -mindepth 1 -maxdepth 1 -type d -name "ripgrep-*")"; mv "${folder}"/* .; rmdir "${folder}"' \
     atpull'%atclone'
 zinit light BurntSushi/ripgrep
 
 
 # Completions
-zsh-defer zicompinit
-zsh-defer zicdreplay
+COMPLETIONS_PATH="${HOME}/.local/share/completions"
+
+if [[ ! -d "${COMPLETIONS_PATH}" ]]; then
+    mkdir -p "${COMPLETIONS_PATH}"
+fi
 
 if command -v kubectl &>/dev/null; then
-    if [[ ! -f "${HOME}/.local/share/completions/kubectl_completion" ]]; then
-        mkdir -p "${HOME}/.local/share/completions"
-        kubectl completion zsh >"${HOME}/.local/share/completions/kubectl_completion"
+    if [[ ! -f "${COMPLETIONS_PATH}/_kubectl" ]]; then
+        kubectl completion zsh >"${COMPLETIONS_PATH}/_kubectl"
     fi
-    zsh-defer source "${HOME}/.local/share/completions/kubectl_completion"
+    zinit ice wait lucid as'completion'
+    zinit snippet "${COMPLETIONS_PATH}/_kubectl"
 fi
 
 if command -v minikube &>/dev/null; then
-    if [[ ! -f "${HOME}/.local/share/completions/minikube_completion" ]]; then
-        mkdir -p "${HOME}/.local/share/completions"
-        minikube completion zsh >"${HOME}/.local/share/completions/minikube_completion"
+    if [[ ! -f "${COMPLETIONS_PATH}/_minikube" ]]; then
+        minikube completion zsh >"${COMPLETIONS_PATH}/_minikube"
     fi
-    zsh-defer source "${HOME}/.local/share/completions/minikube_completion"
+    zinit ice wait lucid as'completion'
+    zinit snippet "${COMPLETIONS_PATH}/_minikube"
 fi
+
+unset COMPLETIONS_PATH
