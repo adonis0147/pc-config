@@ -152,14 +152,16 @@ function install_casks() {
 
 	local casks=(
 		font-sf-mono
-		karabiner-elements
 		keka
 		snipaste
 		stolendata-mpv
 		wezterm
 	)
 	if [[ "${major_version}" -ge 13 ]]; then
-		casks+=(scroll-reverser)
+		casks+=(
+			karabiner-elements
+			scroll-reverser
+		)
 	fi
 
 	for cask in "${casks[@]}"; do
