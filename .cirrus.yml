@@ -7,6 +7,8 @@ macos_task:
 
   script: |
     cd "${HOME}/.config/pc-config"
+    sed 's/^change_homebrew_mirror/# change_homebrew_mirror/' macOS/profile.zsh >macOS/profile.zsh.bak
+    mv macOS/profile.zsh.bak macOS/profile.zsh
     bash install.sh
 
 linux_task:
