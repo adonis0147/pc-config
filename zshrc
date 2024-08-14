@@ -58,8 +58,7 @@ zinit ice wait lucid cloneopts'' pullopts'' as'command' pick'bin/jenv' id-as \
 zinit light jenv/jenv
 
 zinit ice wait lucid cloneopts'' pullopts'' pick'nvm.sh' id-as \
-    atclone'ln -snf "${HOME}/.local/share/zinit/plugins/nvm" "${HOME}/.nvm"' \
-    atload'source bash_completion'
+    atclone'ln -snf "${HOME}/.local/share/zinit/plugins/nvm" "${HOME}/.nvm"'
 zinit light nvm-sh/nvm
 
 
