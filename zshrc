@@ -97,4 +97,16 @@ if command -v minikube &>/dev/null; then
     zinit snippet "${COMPLETIONS_PATH}/_minikube"
 fi
 
+if [[ ! -f "${COMPLETIONS_PATH}/completions" ]]; then
+    completion_files=(
+        '${HOME}/.nvm/bash_completion'
+    )
+    for file in "${completion_files[@]}"; do
+        echo "[[ -f \"${file}\" ]] && source \"${file}\"" >>"${COMPLETIONS_PATH}/completions"
+    done
+fi
+
+zinit wait lucid blockf for \
+    as'null' atload'zicompinit; zicdreplay; source completions' "${COMPLETIONS_PATH}"
+
 unset COMPLETIONS_PATH
