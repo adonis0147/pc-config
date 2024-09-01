@@ -152,6 +152,7 @@ function install_casks() {
 
 	local casks=(
 		font-sf-mono
+		karabiner-elements
 		keka
 		snipaste
 		stolendata-mpv
@@ -159,7 +160,6 @@ function install_casks() {
 	)
 	if [[ "${major_version}" -ge 13 ]]; then
 		casks+=(
-			karabiner-elements
 			scroll-reverser
 		)
 	fi
