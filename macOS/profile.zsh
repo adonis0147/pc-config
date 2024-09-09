@@ -36,6 +36,7 @@ function setup_path() {
 	done
 
 	local cellars=(
+		curl
 		gnu-getopt
 		llvm
 	)
@@ -124,6 +125,7 @@ function install_cellars() {
 		ccache
 		cmake
 		coreutils
+		curl
 		git
 		gnu-getopt
 		gnu-tar
