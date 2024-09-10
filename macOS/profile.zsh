@@ -113,9 +113,10 @@ function setup_config() {
 index-url = http://mirrors.aliyun.com/pypi/simple/
 
 [install]
-trusted-host=mirrors.aliyun.com
+trusted-host = mirrors.aliyun.com
 EOF
 	fi
+	export PIP_TRUSTED_HOST='mirrors.aliyun.com'
 }
 
 function install_cellars() {
