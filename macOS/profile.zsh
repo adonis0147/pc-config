@@ -117,6 +117,11 @@ trusted-host = mirrors.aliyun.com
 EOF
 	fi
 	export PIP_TRUSTED_HOST='mirrors.aliyun.com'
+
+	if [[ ! -f "${HOME}/.gitignore_global" ]]; then
+		cp "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
+		git config --global core.excludesFile "${HOME}/.gitignore_global"
+	fi
 }
 
 function install_cellars() {

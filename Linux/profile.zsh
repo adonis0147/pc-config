@@ -55,6 +55,11 @@ function setup_config() {
 		bash "${HOME}/.config/nvim-config/install.sh"
 		popd >/dev/null
 	fi
+
+	if command -v git &>/dev/null && [[ ! -f "${HOME}/.gitignore_global" ]]; then
+		cp "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
+		git config --global core.excludesFile "${HOME}/.gitignore_global"
+	fi
 }
 
 setup_environment
