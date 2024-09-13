@@ -56,8 +56,8 @@ function setup_config() {
 		popd >/dev/null
 	fi
 
-	if command -v git &>/dev/null && [[ ! -f "${HOME}/.gitignore_global" ]]; then
-		cp "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
+	if command -v git &>/dev/null && [[ ! -L "${HOME}/.gitignore_global" ]]; then
+		ln -snf "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
 		git config --global core.excludesFile "${HOME}/.gitignore_global"
 	fi
 }
