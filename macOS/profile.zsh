@@ -139,7 +139,6 @@ function install_cellars() {
 		llvm
 		neovim
 		ninja
-		npm
 		python
 		tmux
 		wget
