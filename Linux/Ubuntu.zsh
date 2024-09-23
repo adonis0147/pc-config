@@ -46,6 +46,7 @@ EOF
 		'openconnect'
 		'pkg-config'
 		'unzip'
+		'zip'
 	)
 
 	for package in "${packages[@]}"; do
