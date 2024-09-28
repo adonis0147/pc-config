@@ -106,6 +106,12 @@ function setup() {
 	zinit wait lucid blockf for \
 		atload'zicompinit; zicdreplay; _zsh_autosuggest_start' zsh-users/zsh-autosuggestions \
 		as'null' atload' source completions' "${COMPLETIONS_PATH}"
+
+	# Load SDKMAN!
+	if [[ -f "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
+		zinit ice wait lucid
+		zinit snippet "${HOME}/.sdkman/bin/sdkman-init.sh"
+	fi
 }
 
 setup

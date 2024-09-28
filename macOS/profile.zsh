@@ -193,14 +193,7 @@ function install_rye() {
 
 function install_sdkman() {
 	if [[ ! -d "${HOME}/.sdkman" ]]; then
-		curl -s "https://get.sdkman.io" | bash
-
-		local content='[[ -f "${HOME}/.sdkman/bin/sdkman-init.sh" ]] && source ${HOME}/.sdkman/bin/sdkman-init.sh'
-		if ! grep "${content//\[/\\[}" "${HOME}/.zshenv" &>/dev/null; then
-			echo "${content}" >>"${HOME}/.zshenv"
-		fi
-
-		eval "${content}"
+		curl -s "https://get.sdkman.io" | sed '/^sdkman_init_snippet/,/^)/d' | bash
 	fi
 }
 
