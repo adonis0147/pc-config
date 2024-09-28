@@ -50,6 +50,12 @@ function setup() {
 		light-mode zdharma-continuum/fast-syntax-highlighting \
 		light-mode zdharma-continuum/history-search-multi-word
 
+	# Load SDKMAN!
+	if [[ -f "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
+		zinit ice wait lucid
+		zinit snippet "${HOME}/.sdkman/bin/sdkman-init.sh"
+	fi
+
 	zinit ice wait lucid cloneopts'' pullopts'' as'command' pick'bin/jenv' id-as \
 		atclone'ln -snf "${HOME}/.local/share/zinit/plugins/jenv" "${HOME}/.jenv"' \
 		atload'eval "$(jenv init -)"'
@@ -106,12 +112,6 @@ function setup() {
 	zinit wait lucid blockf for \
 		atload'zicompinit; zicdreplay; _zsh_autosuggest_start' zsh-users/zsh-autosuggestions \
 		as'null' atload' source completions' "${COMPLETIONS_PATH}"
-
-	# Load SDKMAN!
-	if [[ -f "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
-		zinit ice wait lucid
-		zinit snippet "${HOME}/.sdkman/bin/sdkman-init.sh"
-	fi
 }
 
 setup
