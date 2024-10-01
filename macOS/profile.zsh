@@ -28,6 +28,7 @@ function setup_path() {
 	local user_paths=(
 		"${HOMEBREW_PREFIX}/bin"
 		"${HOMEBREW_PREFIX}/sbin"
+		"${HOME}/.local/bin"
 		"${HOME}/.local/share/nvim/mason/bin"
 		"${HOME}/.jenv/bin"
 	)
@@ -62,6 +63,8 @@ function setup_environment() {
 	if command -v gtar >/dev/null; then
 		alias tar='gtar'
 	fi
+
+	export MANPATH="${HOME}/.local/share/man:${MANPATH}"
 }
 
 function install_terminfo() {
@@ -125,6 +128,11 @@ EOF
 }
 
 function install_cellars() {
+	local macos_version
+	macos_version="$(sw_vers -productVersion)"
+	local major_version
+	major_version="${macos_version%%.*}"
+
 	local cellars=(
 		autojump
 		bash
@@ -137,12 +145,16 @@ function install_cellars() {
 		gnu-tar
 		htop
 		llvm
-		neovim
 		ninja
 		python
 		tmux
 		wget
 	)
+	if [[ "${major_version}" -ge 13 ]]; then
+		cellars+=(
+			neovim
+		)
+	fi
 
 	for cellar in "${cellars[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/opt/${cellar}" ]]; then
@@ -194,6 +206,41 @@ function install_rye() {
 function install_sdkman() {
 	if [[ ! -d "${HOME}/.sdkman" ]]; then
 		curl -s "https://get.sdkman.io" | sed '/^sdkman_init_snippet/,/^)/d' | bash
+	fi
+}
+
+function install_neovim() {
+	local url='https://api.github.com/repos/neovim/neovim/releases/latest'
+	local latest
+	local current
+
+	latest="$(curl -s "${url}" |
+		python -c "import json; import sys; print(json.load(sys.stdin)['tag_name'])")"
+	current="$(nvim -version 2>/dev/null | sed -n 's/NVIM \(.*\)/\1/p')"
+
+	if [[ "${current}" != "${latest}" ]]; then
+		local bin="${HOME}/.local/bin"
+		local share="${HOME}/.local/share"
+		local prefix="${HOME}/.local/opt/neovim"
+		local download_url
+
+		mkdir -p "${bin}"
+		mkdir -p "${prefix}"
+
+		download_url="https://github.com/neovim/neovim/releases/download/${latest}/nvim-macos-$(uname -m).tar.gz"
+		curl -L "${download_url}" -o - | tar -C "${prefix}" --strip-components=1 -zxf -
+
+		ln -snf "${prefix}/bin"/* "${bin}"/
+
+		local dir
+		for dir in $(find "${prefix}/share/man" -mindepth 1 -maxdepth 1); do
+			local destination
+			destination="${share}/man/$(basename "${dir}")"
+			mkdir -p "${destination}"
+			ln -snf "${dir}"/* "${destination}"/
+		done
+	else
+		echo -e "\033[35;1mThe version of Neovim is latest.\033[0m"
 	fi
 }
 
