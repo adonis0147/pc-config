@@ -1,5 +1,10 @@
 readonly PC_CONFIG_PATH="${HOME}/.config/pc-config"
 
+declare -g macos_version
+macos_version="$(sw_vers -productVersion)"
+declare -g major_version
+major_version="${macos_version%%.*}"
+
 if [[ -f "${PC_CONFIG_PATH}/macOS/env.zsh" ]]; then
 	source "${PC_CONFIG_PATH}/macOS/env.zsh"
 fi
@@ -128,11 +133,6 @@ EOF
 }
 
 function install_cellars() {
-	local macos_version
-	macos_version="$(sw_vers -productVersion)"
-	local major_version
-	major_version="${macos_version%%.*}"
-
 	local cellars=(
 		autojump
 		bash
@@ -164,11 +164,6 @@ function install_cellars() {
 }
 
 function install_casks() {
-	local macos_version
-	macos_version="$(sw_vers -productVersion)"
-	local major_version
-	major_version="${macos_version%%.*}"
-
 	local casks=(
 		font-sf-mono
 		karabiner-elements
@@ -244,6 +239,11 @@ function install_neovim() {
 	fi
 }
 
+function unset_variables() {
+	unset macos_version
+	unset major_version
+}
+
 setup_environment
 change_homebrew_mirror
 install_cellars
@@ -251,3 +251,4 @@ install_casks
 install_rye
 install_sdkman
 setup_config
+unset_variables
