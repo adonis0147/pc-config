@@ -219,6 +219,8 @@ function install_neovim() {
 		local prefix="${HOME}/.local/opt/neovim"
 		local download_url
 
+		rm -rf "${prefix}"
+
 		mkdir -p "${bin}"
 		mkdir -p "${prefix}"
 
