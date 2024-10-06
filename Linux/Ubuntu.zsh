@@ -1,5 +1,5 @@
 function setup_environment() {
-	local llvm_version='18'
+	local llvm_version='19'
 	local user_paths=(
 		'/snap/bin'
 		"/usr/lib/llvm-${llvm_version}/bin"
@@ -12,10 +12,12 @@ function setup_environment() {
 }
 
 function install_packages() {
-	local llvm_version='18'
+	local llvm_version='19'
 	local codename="$(lsb_release -cs 2>/dev/null)"
 	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
 		sudo curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc 2>/dev/null
+	fi
+	if ! grep "llvm-toolchain-${codename}-${llvm_version}" /etc/apt/sources.list.d/llvm-toolchain.list &>/dev/null; then
 		cat >/tmp/llvm-toolchain.list <<EOF
 deb http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
 deb-src http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
