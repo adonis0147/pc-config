@@ -34,6 +34,7 @@ function setup_path() {
 		"${HOMEBREW_PREFIX}/bin"
 		"${HOMEBREW_PREFIX}/sbin"
 		"${HOME}/.local/bin"
+		"${HOME}/.local/sbin"
 		"${HOME}/.local/share/nvim/mason/bin"
 		"${HOME}/.jenv/bin"
 	)
