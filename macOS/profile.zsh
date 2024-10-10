@@ -71,6 +71,8 @@ function setup_environment() {
 	fi
 
 	export MANPATH="${HOME}/.local/share/man:${MANPATH}"
+
+	export GOPROXY='https://mirrors.aliyun.com/goproxy/'
 }
 
 function install_terminfo() {
