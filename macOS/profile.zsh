@@ -212,6 +212,11 @@ function install_neovim() {
 
 	latest="$(curl -s "${url}" |
 		python -c "import json; import sys; print(json.load(sys.stdin)['tag_name'])")"
+
+	if [[ -z "${latest}" ]]; then
+		return
+	fi
+
 	current="$(nvim -version 2>/dev/null | sed -n 's/NVIM \(.*\)/\1/p')"
 
 	if [[ "${current}" != "${latest}" ]]; then
