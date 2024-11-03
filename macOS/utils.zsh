@@ -39,3 +39,15 @@ function install_neovim() {
 		echo -e "\033[35;1mThe version of Neovim is latest.\033[0m"
 	fi
 }
+
+function install_rust() {
+	if ! bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- -y --no-modify-path; then
+		return
+	fi
+
+	local content='[[ -f "${HOME}/.cargo/env" ]] && source "${HOME}/.cargo/env" '
+	if ! grep "${content}" "${HOME}/.zshenv" &>/dev/null; then
+		echo "\n${content}" >>"${HOME}/.zshenv"
+		eval "${content}"
+	fi
+}

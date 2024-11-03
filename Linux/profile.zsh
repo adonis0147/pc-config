@@ -73,3 +73,5 @@ setup_environment
 install_softwares
 install_sdkman
 setup_config
+
+source "${PC_CONFIG_PATH}/Linux/utils.zsh"
