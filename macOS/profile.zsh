@@ -145,6 +145,7 @@ function install_cellars() {
 		gnu-getopt
 		gnu-tar
 		htop
+		lld
 		llvm
 		ninja
 		python
