@@ -41,7 +41,8 @@ function install_neovim() {
 }
 
 function install_rust() {
-	if ! bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- -y --no-modify-path; then
+	if ! bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- \
+		-y --no-modify-path -c rust-src rust-analyzer; then
 		return
 	fi
 
