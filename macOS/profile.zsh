@@ -160,7 +160,7 @@ function install_cellars() {
 
 	for cellar in "${cellars[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/opt/${cellar}" ]]; then
-			brew install "${cellar}"
+			brew install --formula "${cellar}"
 		fi
 	done
 }
