@@ -10,3 +10,24 @@ function install_rust() {
 		eval "${content}"
 	fi
 }
+
+# Ubuntu: sudo apt install squid-openssl
+function setup_squid() {
+	local https_proxy_server="${1}"
+	local port="${2}"
+	local user="${3}"
+	local password="${4}"
+	local config_template="${PC_CONFIG_PATH}/config/squid.conf"
+
+	if [[ ! -f /etc/squid/squid.conf.default ]]; then
+		sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.default
+	fi
+
+	sed "{
+		s/<https_proxy_server>/${https_proxy_server}/
+		s/<port>/${port}/
+		s/<user>/${user}/
+		s/<password>/${password}/
+	}" "${config_template}" >/tmp/squid.conf
+	sudo mv /tmp/squid.conf /etc/squid/squid.conf
+}
