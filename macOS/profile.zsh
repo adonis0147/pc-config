@@ -149,6 +149,7 @@ function install_cellars() {
 		llvm
 		ninja
 		python
+		squid
 		tmux
 		wget
 	)

@@ -52,3 +52,18 @@ function install_rust() {
 		eval "${content}"
 	fi
 }
+
+function setup_squid() {
+	local https_proxy_server="${1}"
+	local port="${2}"
+	local user="${3}"
+	local password="${4}"
+	local config_template="${PC_CONFIG_PATH}/config/squid.conf"
+
+	sed "{
+		s/<https_proxy_server>/${https_proxy_server}/
+		s/<port>/${port}/
+		s/<user>/${user}/
+		s/<password>/${password}/
+	}" "${config_template}" >"${HOMEBREW_PREFIX}/etc/$(basename "${config_template}")"
+}
