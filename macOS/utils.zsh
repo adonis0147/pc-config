@@ -58,12 +58,9 @@ function setup_squid() {
 	local port="${2}"
 	local user="${3}"
 	local password="${4}"
-	local config_template="${PC_CONFIG_PATH}/config/squid.conf"
+	local config="${PC_CONFIG_PATH}/config/squid.conf"
 
-	sed "{
-		s/<https_proxy_server>/${https_proxy_server}/
-		s/<port>/${port}/
-		s/<user>/${user}/
-		s/<password>/${password}/
-	}" "${config_template}" >"${HOMEBREW_PREFIX}/etc/$(basename "${config_template}")"
+	sed "/^never_direct/i \\
+cache_peer ${https_proxy_server} parent ${port} 0 no-query no-digest round-robin login=${user}:${password} ssl \\
+" "${config}" >"${HOMEBREW_PREFIX}/etc/$(basename "${config}")"
 }

@@ -17,17 +17,14 @@ function setup_squid() {
 	local port="${2}"
 	local user="${3}"
 	local password="${4}"
-	local config_template="${PC_CONFIG_PATH}/config/squid.conf"
+	local config="${PC_CONFIG_PATH}/config/squid.conf"
 
 	if [[ ! -f /etc/squid/squid.conf.default ]]; then
 		sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.default
 	fi
 
-	sed "{
-		s/<https_proxy_server>/${https_proxy_server}/
-		s/<port>/${port}/
-		s/<user>/${user}/
-		s/<password>/${password}/
-	}" "${config_template}" >/tmp/squid.conf
+	sed "/^never_direct/i \\
+cache_peer ${https_proxy_server} parent ${port} 0 background-ping no-digest weighted-round-robin login=${user}:${password} ssl" \
+	"${config}" >/tmp/squid.conf
 	sudo mv /tmp/squid.conf /etc/squid/squid.conf
 }
