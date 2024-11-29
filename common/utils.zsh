@@ -64,7 +64,7 @@ function update_sdk() {
 		local latest="$(echo "${content}" | grep -E "${major}.*-${dist}" | awk '{if (NR == 1) print $NF}')"
 
 		if [[ "${latest}" != "${candidate}" ]]; then
-			if [[ "$(jenv global)" =~ ${major} ]]; then
+			if [[ "$(jenv global)" =~ "${major}" ]]; then
 				echo Y | sdk install java "${latest}"
 			else
 				echo n | sdk install java "${latest}"
