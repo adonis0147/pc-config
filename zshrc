@@ -99,9 +99,16 @@ function setup() {
 		zinit snippet "${COMPLETIONS_PATH}/_minikube"
 	fi
 
+	if command -v rye &>/dev/null; then
+		if [[ ! -f "${COMPLETIONS_PATH}/rye_completion" ]]; then
+			rye self completion >"${COMPLETIONS_PATH}/rye_completion"
+		fi
+	fi
+
 	if [[ ! -f "${COMPLETIONS_PATH}/completions" ]]; then
 		local completion_files=(
 			'${HOME}/.nvm/bash_completion'
+			"${COMPLETIONS_PATH}/rye_completion"
 		)
 		local file
 		for file in "${completion_files[@]}"; do
