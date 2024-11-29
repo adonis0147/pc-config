@@ -11,6 +11,16 @@ function install_rust() {
 	fi
 }
 
+function update_rust() {
+	echo -e "\033[32;1m======== Update Rust ========\033[0m"
+
+	if command -v rustup &>/dev/null; then
+		rustup update
+	else
+		echo -e "\033[35;1mRust is not installed.\033[0m"
+	fi
+}
+
 function update_zinit() {
 	echo -e "\033[32;1m======== Update Zinit ========\033[0m"
 

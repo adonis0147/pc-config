@@ -22,5 +22,6 @@ function update_all() {
 	update_zinit
 	update_rye
 	update_node
+	update_rust
 	update_sdk
 }
