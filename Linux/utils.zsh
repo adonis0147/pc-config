@@ -1,15 +1,4 @@
-function install_rust() {
-	if ! bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- \
-		-y --no-modify-path -c rust-src rust-analyzer; then
-		return
-	fi
-
-	local content='[[ -f "${HOME}/.cargo/env" ]] && source "${HOME}/.cargo/env" '
-	if ! grep "${content}" "${HOME}/.zshenv" &>/dev/null; then
-		echo "\n${content}" >>"${HOME}/.zshenv"
-		eval "${content}"
-	fi
-}
+source "${PC_CONFIG_PATH}/common/utils.zsh"
 
 # Ubuntu: sudo apt install squid-openssl
 function setup_squid() {
@@ -27,4 +16,11 @@ function setup_squid() {
 cache_peer ${https_proxy_server} parent ${port} 0 background-ping no-digest weighted-round-robin login=${user}:${password} ssl" \
 	"${config}" >/tmp/squid.conf
 	sudo mv /tmp/squid.conf /etc/squid/squid.conf
+}
+
+function update_all() {
+	update_zinit
+	update_rye
+	update_node
+	update_sdk
 }

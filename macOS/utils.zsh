@@ -1,4 +1,8 @@
+source "${PC_CONFIG_PATH}/common/utils.zsh"
+
 function install_neovim() {
+	echo -e "\033[32;1m======== Install Neovim ========\033[0m"
+
 	local url='https://api.github.com/repos/neovim/neovim/releases/latest'
 	local latest
 	local current
@@ -40,19 +44,6 @@ function install_neovim() {
 	fi
 }
 
-function install_rust() {
-	if ! bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- \
-		-y --no-modify-path -c rust-src rust-analyzer; then
-		return
-	fi
-
-	local content='[[ -f "${HOME}/.cargo/env" ]] && source "${HOME}/.cargo/env" '
-	if ! grep "${content}" "${HOME}/.zshenv" &>/dev/null; then
-		echo "\n${content}" >>"${HOME}/.zshenv"
-		eval "${content}"
-	fi
-}
-
 function setup_squid() {
 	local https_proxy_server="${1}"
 	local port="${2}"
@@ -63,4 +54,12 @@ function setup_squid() {
 	sed "/^never_direct/i \\
 cache_peer ${https_proxy_server} parent ${port} 0 no-query no-digest round-robin login=${user}:${password} ssl \\
 " "${config}" >"${HOMEBREW_PREFIX}/etc/$(basename "${config}")"
+}
+
+function update_all() {
+	update_zinit
+	update_rye
+	update_node
+	update_sdk
+	install_neovim
 }
