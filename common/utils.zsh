@@ -35,6 +35,7 @@ function update_rye() {
 	else
 		echo -e "\033[35;1mRye is not installed.\033[0m"
 	fi
+	rye fetch
 }
 
 function update_node() {

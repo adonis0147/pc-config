@@ -195,6 +195,7 @@ function install_rye() {
 		curl -sSL https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
 
 		rye config --set-bool behavior.use-uv=true
+		rye config --set default.toolchain=cpython@3
 	fi
 
 	alias pip='python -m pip'
