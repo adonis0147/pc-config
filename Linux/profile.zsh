@@ -63,15 +63,10 @@ function setup_config() {
 	fi
 }
 
-function install_sdkman() {
-	if [[ ! -d "${HOME}/.sdkman" ]]; then
-		curl -s "https://get.sdkman.io" | sed '/^sdkman_init_snippet/,/^)/d' | bash
-	fi
-}
+source "${PC_CONFIG_PATH}/Linux/utils.zsh"
 
 setup_environment
 install_softwares
+install_rye
 install_sdkman
 setup_config
-
-source "${PC_CONFIG_PATH}/Linux/utils.zsh"

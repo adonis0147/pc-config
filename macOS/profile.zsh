@@ -188,30 +188,12 @@ function install_casks() {
 	done
 }
 
-function install_rye() {
-	export PATH="${HOME}/.rye/shims:${PATH}"
-
-	if [[ ! -d "${HOME}/.rye" ]]; then
-		curl -sSL https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
-
-		rye config --set-bool behavior.use-uv=true
-		rye config --set default.toolchain=cpython@3
-	fi
-
-	alias pip='python -m pip'
-	alias pip3='python3 -m pip'
-}
-
-function install_sdkman() {
-	if [[ ! -d "${HOME}/.sdkman" ]]; then
-		curl -s "https://get.sdkman.io" | sed '/^sdkman_init_snippet/,/^)/d' | bash
-	fi
-}
-
 function unset_variables() {
 	unset macos_version
 	unset major_version
 }
+
+source "${PC_CONFIG_PATH}/macOS/utils.zsh"
 
 setup_environment
 change_homebrew_mirror
@@ -221,5 +203,3 @@ install_rye
 install_sdkman
 setup_config
 unset_variables
-
-source "${PC_CONFIG_PATH}/macOS/utils.zsh"

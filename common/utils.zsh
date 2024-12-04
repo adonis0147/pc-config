@@ -27,6 +27,20 @@ function update_zinit() {
 	zinit update
 }
 
+function install_rye() {
+	export PATH="${HOME}/.rye/shims:${PATH}"
+
+	if [[ ! -d "${HOME}/.rye" ]]; then
+		curl -sSL https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
+
+		rye config --set-bool behavior.use-uv=true
+		rye config --set default.toolchain=cpython@3
+	fi
+
+	alias pip='python -m pip'
+	alias pip3='python3 -m pip'
+}
+
 function update_rye() {
 	echo -e "\033[32;1m======== Update Rye ========\033[0m"
 
@@ -42,6 +56,12 @@ function update_node() {
 	echo -e "\033[32;1m======== Update Node ========\033[0m"
 
 	nvm install node --reinstall-packages-from=node
+}
+
+function install_sdkman() {
+	if [[ ! -d "${HOME}/.sdkman" ]]; then
+		curl -s "https://get.sdkman.io" | sed '/^sdkman_init_snippet/,/^)/d' | bash
+	fi
 }
 
 function update_sdk() {
