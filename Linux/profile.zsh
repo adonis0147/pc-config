@@ -9,6 +9,7 @@ function setup_path() {
 		"${HOME}/.local/bin"
 		"${HOME}/.local/sbin"
 		"${HOME}/.local/share/nvim/mason/bin"
+		"${HOME}/.rye/shims"
 	)
 	for p in "${user_paths[@]}"; do
 		PATH="${p}:${PATH}"
@@ -35,6 +36,11 @@ function setup_environment() {
 
 	if [[ -s "${HOME}/.autojump/etc/profile.d/autojump.sh" ]]; then
 		source "${HOME}/.autojump/etc/profile.d/autojump.sh"
+	fi
+
+	if command -v rye &>/dev/null; then
+		alias pip='python -m pip'
+		alias pip3='python3 -m pip'
 	fi
 }
 
@@ -67,6 +73,5 @@ source "${PC_CONFIG_PATH}/Linux/utils.zsh"
 
 setup_environment
 install_softwares
-install_rye
 install_sdkman
 setup_config
