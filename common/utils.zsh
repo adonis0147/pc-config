@@ -68,7 +68,13 @@ function update_sdk() {
 	echo -e "\033[32;1m======== Update SDK ========\033[0m"
 
 	local candidate
-	local content="$(echo n | sdk upgrade | sed '/^$/d; /Available defaults/d; $d' | awk '{gsub(/\033\[[0-9]+(;[0-9]+)*m/, "", $0); print $0}')"
+	local content
+	if ! content="$(echo n | sdk upgrade)"; then
+		echo "${content}"
+		return
+	fi
+
+	content="$(echo "${content}" | sed '1,/Available defaults/d; /^$/d; $d' | awk '{gsub(/\033\[[0-9]+(;[0-9]+)*m/, "", $0); print $0}')"
 	while read -r candidate; do
 		echo Y | sdk upgrade "${candidate}"
 	done < <(echo "${content}" | awk '{if ($1 != "java") print $1}')
