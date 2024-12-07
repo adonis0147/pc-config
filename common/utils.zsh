@@ -46,10 +46,10 @@ function update_rye() {
 
 	if command -v rye &>/dev/null; then
 		rye self update
+		rye fetch
 	else
 		echo -e "\033[35;1mRye is not installed.\033[0m"
 	fi
-	rye fetch
 }
 
 function update_node() {
