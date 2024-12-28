@@ -83,7 +83,11 @@ function update_sdk() {
 		return
 	fi
 
-	local content="$(sdk list java)"
+	if ! content="$(sdk list java)"; then
+		echo "${content}"
+		return
+	fi
+
 	while read -r candidate; do
 		candidate="$(basename "${candidate}")"
 		local major="${candidate%%.*}"
