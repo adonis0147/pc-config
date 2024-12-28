@@ -76,6 +76,13 @@ function setup() {
 		atpull'%atclone'
 	zinit light BurntSushi/ripgrep
 
+	if [[ "$(uname -a)" =~ Darwin.*x86_64 ]]; then
+		zinit ice wait lucid from'gh-r' as'program' \
+			atclone'folder="$(find . -mindepth 1 -maxdepth 1 -type d -name "ccache-*")"; mv "${folder}"/* .; rmdir "${folder}"' \
+			atpull'%atclone'
+		zinit light ccache/ccache
+	fi
+
 	# Completions
 	local COMPLETIONS_PATH="${HOME}/.local/share/completions"
 

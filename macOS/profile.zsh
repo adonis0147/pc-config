@@ -137,7 +137,6 @@ function install_cellars() {
 	local cellars=(
 		autojump
 		bash
-		ccache
 		cmake
 		coreutils
 		curl
@@ -155,6 +154,7 @@ function install_cellars() {
 	)
 	if [[ "${major_version}" -ge 13 ]]; then
 		cellars+=(
+			ccache
 			neovim
 		)
 	fi
