@@ -37,6 +37,7 @@ function setup_path() {
 		"${HOME}/.local/sbin"
 		"${HOME}/.local/share/nvim/mason/bin"
 		"${HOME}/.jenv/bin"
+		"${GOBIN}"
 	)
 	for p in "${user_paths[@]}"; do
 		PATH="${p}:${PATH}"
@@ -55,6 +56,9 @@ function setup_path() {
 }
 
 function setup_environment() {
+	export GOPATH="${HOME}/.local/share/go"
+	export GOBIN="${GOPATH}/bin"
+
 	setup_path
 
 	if command -v nvim >/dev/null; then
