@@ -1,5 +1,5 @@
 function setup_environment() {
-	local llvm_version='19'
+	local llvm_version='20'
 	local user_paths=(
 		'/snap/bin'
 		"/usr/lib/llvm-${llvm_version}/bin"
@@ -12,7 +12,7 @@ function setup_environment() {
 }
 
 function install_packages() {
-	local llvm_version='19'
+	local llvm_version='20'
 	local codename="$(lsb_release -cs 2>/dev/null)"
 	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
 		sudo curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc 2>/dev/null
