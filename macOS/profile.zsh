@@ -135,6 +135,10 @@ EOF
 		ln -snf "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
 		git config --global core.excludesFile "${HOME}/.gitignore_global"
 	fi
+
+	if [[ ! -L "${HOME}/.ideavimrc" ]]; then
+		ln -snf "${PC_CONFIG_PATH}/config/ideavimrc" "${HOME}/.ideavimrc"
+	fi
 }
 
 function install_cellars() {

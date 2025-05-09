@@ -1,0 +1,57 @@
+""" Plugins ---------------------------------
+
+set surround
+set commentary
+
+""" Plugin settings -------------------------
+
+
+""" Common settings -------------------------
+
+" Scroll
+set scrolloff=7
+
+" Ignore case when searching
+set ignorecase
+
+" When searching try to be smart about cases
+set smartcase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" Using regular expressions easily
+set magic
+
+""" Mappings settings -----------------------
+
+" Map leader to space
+let mapleader=" "
+
+" Disable highlight
+noremap <silent> <leader><cr> :noh<cr>
+
+" Quick quit command
+nnoremap <leader>e :bdelete<cr>
+nnoremap <leader>E :qa!<cr>
+
+" Easier moving between windows
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+map <c-h> <c-w>h
+tnoremap <c-j> <c-w>j
+tnoremap <c-k> <c-w>k
+tnoremap <c-l> <c-w>l
+tnoremap <c-h> <c-w>h
+
+" Easier moving between tabs
+nnoremap <leader>n <esc>:bprevious<cr>
+nnoremap <leader>m <esc>:bnext<cr>
+
+" Easier moving of code blocks
+vnoremap < <gv
+vnoremap > >gv
