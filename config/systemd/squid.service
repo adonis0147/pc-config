@@ -1,0 +1,12 @@
+[Unit]
+Description=Squid Web Proxy Server
+
+[Service]
+# curl -L https://curl.se/ca/cacert.pem -o "${HOME}/.local/share/certs/cacert.pem"
+Environment=SSL_CERT_FILE=%h/.local/share/certs/cacert.pem
+WorkingDirectory=%h/.local/opt/squid
+ExecStart=%h/.local/opt/squid/sbin/squid -d9 --foreground
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
