@@ -92,7 +92,7 @@ function update_sdk() {
 		candidate="$(basename "${candidate}")"
 		local major="${candidate%%.*}"
 		local dist="${candidate/*-}"
-		local latest="$(echo "${content}" | grep -E "${major}.*-${dist}" | awk '{if (NR == 1) print $NF}')"
+		local latest="$(echo "${content}" | grep -E "\| ${major}\..*-${dist}" | awk '{if (NR == 1) print $NF}')"
 
 		if [[ "${latest}" != "${candidate}" ]]; then
 			if [[ "$(jenv global)" =~ "${major}" ]]; then
