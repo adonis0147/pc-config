@@ -1,7 +1,7 @@
 # # .bash_profile
 # export TERM="${TERM/-256color/}-256color"
 #
-# if [[ -f "${HOME}/.local/share/devel/bin/zsh" ]]; then
+# if [[ -f "${HOME}/.local/share/devel/bin/zsh" ]] && [[ "${TERM}" =~ .*-256color ]]; then
 #     exec "${HOME}/.local/share/devel/bin/zsh" -l
 # fi
 
