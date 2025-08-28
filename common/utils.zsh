@@ -74,8 +74,15 @@ function update_sdk() {
 		return
 	fi
 
+	echo "${content}"
 	content="$(echo "${content}" | sed '1,/Available defaults/d; /^$/d; $d' | awk '{gsub(/\033\[[0-9]+(;[0-9]+)*m/, "", $0); print $0}')"
+
 	while read -r candidate; do
+		echo "candidate: ${candidate}"
+		if [[ -z "${candidate}" ]]; then
+			continue
+		fi
+
 		echo Y | sdk upgrade "${candidate}"
 	done < <(echo "${content}" | awk '{if ($1 != "java") print $1}')
 
