@@ -204,7 +204,6 @@ function unset_variables() {
 source "${PC_CONFIG_PATH}/macOS/utils.zsh"
 
 setup_environment
-change_homebrew_mirror
 install_cellars
 install_casks
 install_rye
