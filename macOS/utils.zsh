@@ -57,9 +57,17 @@ cache_peer ${https_proxy_server} parent ${port} 0 no-query no-digest round-robin
 }
 
 function update_all() {
+	local macos_version
+	macos_version="$(sw_vers -productVersion)"
+	local major_version="${macos_version%%.*}"
+
 	update_zinit
 	update_rye
-	update_node
+
+	if [[ "${major_version}" -ge 13 ]]; then
+		update_node
+	fi
+
 	update_rust
 	update_sdk
 	install_neovim
