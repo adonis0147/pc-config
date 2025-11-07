@@ -90,7 +90,8 @@ function update_sdk() {
 		return
 	fi
 
-	if ! content="$(sdk list java)"; then
+	content="$(sdk list java)"
+	if echo "${content}" | grep 'INTERNET NOT REACHABLE!' &>/dev/null; then
 		echo "${content}"
 		return
 	fi
