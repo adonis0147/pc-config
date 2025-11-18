@@ -206,7 +206,7 @@ source "${PC_CONFIG_PATH}/macOS/utils.zsh"
 setup_environment
 install_cellars
 install_casks
-install_rye
+install_uv
 install_sdkman
 setup_config
 unset_variables

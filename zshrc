@@ -109,16 +109,16 @@ function setup() {
 		zinit snippet "${COMPLETIONS_PATH}/_minikube"
 	fi
 
-	if command -v rye &>/dev/null; then
-		if [[ ! -f "${COMPLETIONS_PATH}/rye_completion" ]]; then
-			rye self completion >"${COMPLETIONS_PATH}/rye_completion"
+	if command -v uv &>/dev/null; then
+		if [[ ! -f "${COMPLETIONS_PATH}/uv_completion" ]]; then
+			uv generate-shell-completion zsh >"${COMPLETIONS_PATH}/uv_completion"
 		fi
 	fi
 
 	if [[ ! -f "${COMPLETIONS_PATH}/completions" ]]; then
 		local completion_files=(
 			'${HOME}/.nvm/bash_completion'
-			"${COMPLETIONS_PATH}/rye_completion"
+			"${COMPLETIONS_PATH}/uv_completion"
 		)
 		local file
 		for file in "${completion_files[@]}"; do

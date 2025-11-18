@@ -27,28 +27,31 @@ function update_zinit() {
 	zinit update
 }
 
-function install_rye() {
-	export PATH="${HOME}/.rye/shims:${PATH}"
-
-	if [[ ! -d "${HOME}/.rye" ]]; then
-		curl -sSL https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
-
-		rye config --set-bool behavior.use-uv=true
-		rye config --set default.toolchain=cpython@3
+function install_uv() {
+	if [[ -x "${HOME}/.local/bin/uv" ]]; then
+		return
 	fi
 
-	alias pip='python -m pip'
-	alias pip3='python3 -m pip'
+	curl -LsSf https://astral.sh/uv/install.sh | bash
+
+	if command -v uv &>/dev/null; then
+		uv python install default
+
+		local python3="$(find "${HOME}/.local/bin" -name 'python3.*')"
+		if [[ -n "${python3}" ]]; then
+			ln -snf "${python3}" "${HOME}/.local/bin/python3"
+			ln -snf python3 "${HOME}/.local/bin/python"
+		fi
+	fi
 }
 
-function update_rye() {
-	echo -e "\033[32;1m======== Update Rye ========\033[0m"
+function update_uv() {
+	echo -e "\033[32;1m======== Update uv ========\033[0m"
 
-	if command -v rye &>/dev/null; then
-		rye self update
-		rye fetch
+	if command -v uv &>/dev/null; then
+		uv self update
 	else
-		echo -e "\033[35;1mRye is not installed.\033[0m"
+		echo -e "\033[35;1muv is not installed.\033[0m"
 	fi
 }
 

@@ -20,7 +20,7 @@ cache_peer ${https_proxy_server} parent ${port} 0 background-ping no-digest weig
 
 function update_all() {
 	update_zinit
-	update_rye
+	update_uv
 	update_node
 	update_rust
 	update_sdk

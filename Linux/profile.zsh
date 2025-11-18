@@ -9,7 +9,6 @@ function setup_path() {
 		"${HOME}/.local/bin"
 		"${HOME}/.local/sbin"
 		"${HOME}/.local/share/nvim/mason/bin"
-		"${HOME}/.rye/shims"
 		"${GOBIN}"
 	)
 	for p in "${user_paths[@]}"; do
@@ -40,11 +39,6 @@ function setup_environment() {
 
 	if [[ -s "${HOME}/.autojump/etc/profile.d/autojump.sh" ]]; then
 		source "${HOME}/.autojump/etc/profile.d/autojump.sh"
-	fi
-
-	if command -v rye &>/dev/null; then
-		alias pip='python -m pip'
-		alias pip3='python3 -m pip'
 	fi
 }
 

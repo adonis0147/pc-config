@@ -62,7 +62,7 @@ function update_all() {
 	local major_version="${macos_version%%.*}"
 
 	update_zinit
-	update_rye
+	update_uv
 
 	if [[ "${major_version}" -ge 13 ]]; then
 		update_node
