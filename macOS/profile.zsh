@@ -75,6 +75,10 @@ function setup_environment() {
 	fi
 
 	export MANPATH="${HOME}/.local/share/man:${MANPATH}"
+
+	if command -v uv >/dev/null; then
+		export UV_PYTHON_INSTALL_MIRROR='https://registry.npmmirror.com/-/binary/python-build-standalone'
+	fi
 }
 
 function install_terminfo() {

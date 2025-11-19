@@ -35,6 +35,7 @@ function install_uv() {
 	curl -LsSf https://astral.sh/uv/install.sh | bash
 
 	if command -v uv &>/dev/null; then
+		export UV_PYTHON_INSTALL_MIRROR='https://registry.npmmirror.com/-/binary/python-build-standalone'
 		uv python install default
 
 		local python3="$(find "${HOME}/.local/bin" -name 'python3.*')"

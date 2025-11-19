@@ -40,6 +40,10 @@ function setup_environment() {
 	if [[ -s "${HOME}/.autojump/etc/profile.d/autojump.sh" ]]; then
 		source "${HOME}/.autojump/etc/profile.d/autojump.sh"
 	fi
+
+	if command -v uv >/dev/null; then
+		export UV_PYTHON_INSTALL_MIRROR='https://registry.npmmirror.com/-/binary/python-build-standalone'
+	fi
 }
 
 function install_softwares() {
