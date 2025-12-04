@@ -51,6 +51,7 @@ function update_uv() {
 
 	if command -v uv &>/dev/null; then
 		uv self update
+		uv python upgrade
 	else
 		echo -e "\033[35;1muv is not installed.\033[0m"
 	fi
