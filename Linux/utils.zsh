@@ -18,6 +18,17 @@ cache_peer ${https_proxy_server} parent ${port} 0 background-ping no-digest weig
 	sudo mv /tmp/squid.conf /etc/squid/squid.conf
 }
 
+function setup_mihomo() {
+	local url="${1}"
+	local config="${PC_CONFIG_PATH}/config/mihomo.yaml"
+
+	mkdir -p "${HOME}/.config/mihomo"
+
+	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" > "${HOME}/.config/mihomo/config.yaml"
+
+	systemctl --user enable "${PC_CONFIG_PATH}/config/systemd/mihomo.service"
+}
+
 function update_all() {
 	update_zinit
 	update_uv
