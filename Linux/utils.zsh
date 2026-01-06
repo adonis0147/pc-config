@@ -27,6 +27,10 @@ function setup_mihomo() {
 	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" > "${HOME}/.config/mihomo/config.yaml"
 
 	systemctl --user enable "${PC_CONFIG_PATH}/config/systemd/mihomo.service"
+
+	if [[ "$(loginctl show-user "${USER}" | sed -n 's/Linger=\(.*\)/\1/p')" == 'no' ]]; then
+		sudo loginctl enable-linger "${USER}"
+	fi
 }
 
 function update_all() {

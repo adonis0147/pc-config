@@ -12,4 +12,4 @@ ExecStart=%h/.local/bin/mihomo -d %h/.config/mihomo
 ExecReload=/bin/kill -HUP $MAINPID
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
