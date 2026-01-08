@@ -47,7 +47,6 @@ EOF
 		'ninja-build'
 		'openconnect'
 		'pkg-config'
-		'squid-openssl'
 		'unzip'
 		'zip'
 	)

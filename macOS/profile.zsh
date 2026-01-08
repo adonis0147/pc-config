@@ -158,9 +158,9 @@ function install_cellars() {
 		htop
 		lld
 		llvm
+		mihomo
 		ninja
 		python
-		squid
 		tmux
 		wget
 	)

@@ -56,6 +56,19 @@ cache_peer ${https_proxy_server} parent ${port} 0 no-query no-digest round-robin
 " "${config}" >"${HOMEBREW_PREFIX}/etc/$(basename "${config}")"
 }
 
+function setup_mihomo() {
+	local url="${1}"
+	local config="${PC_CONFIG_PATH}/config/mihomo.yaml"
+	local service_status
+
+	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" > "${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
+
+	service_status="$(brew services | grep mihomo | awk '{print $2}')"
+	if [[ "${service_status}" == 'none' ]]; then
+		brew services start mihomo
+	fi
+}
+
 function update_all() {
 	local macos_version
 	macos_version="$(sw_vers -productVersion)"
