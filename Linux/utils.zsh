@@ -24,7 +24,7 @@ function setup_mihomo() {
 
 	mkdir -p "${HOME}/.config/mihomo"
 
-	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" > "${HOME}/.config/mihomo/config.yaml"
+	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" >"${HOME}/.config/mihomo/config.yaml"
 
 	systemctl --user enable "${PC_CONFIG_PATH}/config/systemd/mihomo.service"
 

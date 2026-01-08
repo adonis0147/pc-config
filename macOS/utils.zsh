@@ -6,9 +6,15 @@ function install_neovim() {
 	local url='https://api.github.com/repos/neovim/neovim/releases/latest'
 	local latest
 	local current
+	local cmd
 
-	latest="$(curl -s "${url}" |
-		python -c "import json; import sys; print(json.load(sys.stdin)['tag_name'])")"
+	if [[ -n "${GITHUB_TOKEN}" ]]; then
+		cmd="curl -H 'Authorization: Bearer ${GITHUB_TOKEN}' -s ${url}"
+	else
+		cmd="curl -s ${url}"
+	fi
+
+	latest="$(eval "${cmd}" | python -c "import json; import sys; print(json.load(sys.stdin)['tag_name'])")"
 
 	if [[ -z "${latest}" ]]; then
 		return
@@ -61,7 +67,7 @@ function setup_mihomo() {
 	local config="${PC_CONFIG_PATH}/config/mihomo.yaml"
 	local service_status
 
-	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" > "${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
+	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" >"${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
 
 	service_status="$(brew services | grep mihomo | awk '{print $2}')"
 	if [[ "${service_status}" == 'none' ]]; then
