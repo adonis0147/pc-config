@@ -10,6 +10,8 @@ Restart=always
 ExecStartPre=/usr/bin/sleep 1s
 ExecStart=%h/.local/bin/mihomo -d %h/.config/mihomo
 ExecReload=/bin/kill -HUP $MAINPID
+StandardOutput=append:%h/.local/state/mihomo.log
+StandardError=append:%h/.local/state/mihomo.log
 
 [Install]
 WantedBy=default.target
