@@ -86,6 +86,11 @@ function setup() {
 		zinit light ccache/ccache
 	fi
 
+	zinit ice wait lucid from'gh-r' as'program' \
+		atclone'mv tree-sitter-* tree-sitter; chmod a+x tree-sitter; if command -v relocate &>/dev/null; then relocate tree-sitter; fi' \
+		atpull'%atclone'
+	zinit light tree-sitter/tree-sitter
+
 	# Completions
 	local COMPLETIONS_PATH="${HOME}/.local/share/completions"
 
