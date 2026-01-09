@@ -4,10 +4,7 @@ After=network.target NetworkManager.service systemd-networkd.service iwd.service
 
 [Service]
 Type=simple
-LimitNPROC=500
-LimitNOFILE=1000000
 Restart=always
-ExecStartPre=/usr/bin/sleep 1s
 ExecStart=%h/.local/bin/mihomo -d %h/.config/mihomo
 ExecReload=/bin/kill -HUP $MAINPID
 StandardOutput=append:%h/.local/state/mihomo.log
