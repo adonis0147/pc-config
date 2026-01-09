@@ -119,6 +119,7 @@ function setup_config() {
 	fi
 
 	if [[ ! -d "${PC_CONFIG_PATH}/terminfo" ]]; then
+		mkdir "${PC_CONFIG_PATH}/terminfo"
 		install_terminfo
 	fi
 
