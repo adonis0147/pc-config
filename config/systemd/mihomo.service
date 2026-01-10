@@ -5,7 +5,7 @@ After=network.target NetworkManager.service systemd-networkd.service iwd.service
 [Service]
 Type=simple
 Restart=always
-ExecStart=%h/.local/bin/mihomo -d %h/.config/mihomo
+ExecStart=%h/.local/share/zinit/plugins/mihomo/mihomo -d %h/.config/mihomo
 ExecReload=/bin/kill -HUP $MAINPID
 StandardOutput=append:%h/.local/state/mihomo.log
 StandardError=append:%h/.local/state/mihomo.log

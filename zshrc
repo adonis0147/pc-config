@@ -6,6 +6,9 @@
 # fi
 
 function setup() {
+	local system_info
+	system_info="$(uname -a)"
+
 	### Zinit Setting
 
 	local dircolors_cmd
@@ -79,17 +82,24 @@ function setup() {
 		atpull'%atclone'
 	zinit light BurntSushi/ripgrep
 
-	if [[ "$(uname -a)" =~ Darwin.*x86_64 ]]; then
+	zinit ice wait lucid from'gh-r' as'program' \
+		atclone'mv tree-sitter-* tree-sitter; chmod a+x tree-sitter; if command -v relocate &>/dev/null; then relocate tree-sitter; fi' \
+		atpull'%atclone'
+	zinit light tree-sitter/tree-sitter
+
+	if [[ "${system_info}" =~ Darwin.*x86_64 ]]; then
 		zinit ice wait lucid from'gh-r' as'program' \
 			atclone'folder="$(find . -mindepth 1 -maxdepth 1 -type d -name "ccache-*")"; mv "${folder}"/* .; rmdir "${folder}"' \
 			atpull'%atclone'
 		zinit light ccache/ccache
 	fi
 
-	zinit ice wait lucid from'gh-r' as'program' \
-		atclone'mv tree-sitter-* tree-sitter; chmod a+x tree-sitter; if command -v relocate &>/dev/null; then relocate tree-sitter; fi' \
-		atpull'%atclone'
-	zinit light tree-sitter/tree-sitter
+	if [[ "${system_info}" =~ Linux ]]; then
+		zinit ice wait lucid from'gh-r' as'program' id-as \
+			atclone'mv mihomo-* mihomo; chmod a+x mihomo' \
+			atpull'%atclone'
+		zinit light MetaCubeX/mihomo
+	fi
 
 	# Completions
 	local COMPLETIONS_PATH="${HOME}/.local/share/completions"
