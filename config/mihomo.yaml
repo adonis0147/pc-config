@@ -1,6 +1,25 @@
 mixed-port: 7897
 allow-lan: false
 
+external-controller: "127.0.0.1:9090"
+external-ui: ui
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-filter:
+    - "*"
+    - "+.lan"
+    - "+.local"
+  default-nameserver:
+    - tls://223.5.5.5
+    - tls://223.6.6.6
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
 proxy-providers:
   provider:
     url: ""
@@ -16,7 +35,7 @@ proxy-providers:
       additional-prefix: "[provider]"
 
 proxies:
-  - name: "直连"
+  - name: 直连
     type: direct
     udp: true
 

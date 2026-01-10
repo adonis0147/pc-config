@@ -14,17 +14,25 @@ function setup_squid() {
 
 	sed "/^never_direct/i \\
 cache_peer ${https_proxy_server} parent ${port} 0 background-ping no-digest weighted-round-robin login=${user}:${password} ssl" \
-	"${config}" >/tmp/squid.conf
+		"${config}" >/tmp/squid.conf
 	sudo mv /tmp/squid.conf /etc/squid/squid.conf
 }
 
 function setup_mihomo() {
 	local url="${1}"
+	local ui_host="${2}"
 	local config="${PC_CONFIG_PATH}/config/mihomo.yaml"
+
+	if [[ -z "${ui_host}" ]]; then
+		ui_host='127.0.0.1'
+	fi
 
 	mkdir -p "${HOME}/.config/mihomo"
 
-	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" >"${HOME}/.config/mihomo/config.yaml"
+	sed "{
+		s|\(external-controller: \).*|\1\"${ui_host}:9090\"|
+		s|\(url: \)\"\"|\1\"${url}\"|
+	}" "${config}" >"${HOME}/.config/mihomo/config.yaml"
 
 	systemctl --user enable "${PC_CONFIG_PATH}/config/systemd/mihomo.service"
 

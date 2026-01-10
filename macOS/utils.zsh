@@ -64,10 +64,18 @@ cache_peer ${https_proxy_server} parent ${port} 0 no-query no-digest round-robin
 
 function setup_mihomo() {
 	local url="${1}"
+	local ui_host="${2}"
 	local config="${PC_CONFIG_PATH}/config/mihomo.yaml"
 	local service_status
 
-	sed "s|\(url: \)\"\"|\1\"${url}\"|" "${config}" >"${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
+	if [[ -z "${ui_host}" ]]; then
+		ui_host='127.0.0.1'
+	fi
+
+	sed "{
+		s|\(external-controller: \).*|\1\"${ui_host}:9090\"|
+		s|\(url: \)\"\"|\1\"${url}\"|
+	}" "${config}" >"${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
 
 	service_status="$(brew services | grep mihomo | awk '{print $2}')"
 	if [[ "${service_status}" == 'none' ]]; then
