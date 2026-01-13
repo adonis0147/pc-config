@@ -50,7 +50,11 @@ function update_uv() {
 	echo -e "\033[32;1m======== Update uv ========\033[0m"
 
 	if command -v uv &>/dev/null; then
-		uv self update
+		if [[ -n "${GITHUB_TOKEN}" ]]; then
+			uv self update --token "${GITHUB_TOKEN}"
+		else
+			uv self update
+		fi
 		uv python upgrade
 	else
 		echo -e "\033[35;1muv is not installed.\033[0m"
