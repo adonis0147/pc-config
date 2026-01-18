@@ -83,6 +83,22 @@ function setup_mihomo() {
 	fi
 }
 
+function enable_wifi_web_proxy() {
+	local domain=${1:-127.0.0.1}
+	local port=${2:-7897}
+	local service=${3-Wi-Fi}
+
+	networksetup -setwebproxy "${service}" "${domain}" "${port}"
+	networksetup -setsecurewebproxy "${service}" "${domain}" "${port}"
+}
+
+function disable_wifi_web_proxy() {
+	local service=${1:-Wi-Fi}
+
+	networksetup -setwebproxystate "${service}" off
+	networksetup -setsecurewebproxystate "${service}" off
+}
+
 function update_all() {
 	local macos_version
 	macos_version="$(sw_vers -productVersion)"
