@@ -51,7 +51,7 @@ function setup() {
 		depth'1' # git clone depth
 	zinit light romkatv/powerlevel10k
 
-	zstyle ':plugin:history-search-multi-word' clear-on-cancel 'yes'
+	zstyle ':plugin:history-search-multi-word' reset-prompt-protect 1
 	zinit wait lucid for \
 		light-mode zdharma-continuum/fast-syntax-highlighting \
 		light-mode zdharma-continuum/history-search-multi-word
