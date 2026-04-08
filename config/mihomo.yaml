@@ -154,11 +154,12 @@ proxy-groups:
     tolerance: 10
 
 rules:
+  - RULE-SET,private_ip,直连,no-resolve
+
   - RULE-SET,anthropic_domain,AI
   - RULE-SET,google-deepmind_domain,AI
   - RULE-SET,openai_domain,AI
 
-  - RULE-SET,private_ip,直连,no-resolve
   - RULE-SET,github_domain,Github
   - RULE-SET,twitter_domain,Twitter
   - RULE-SET,youtube_domain,YouTube
