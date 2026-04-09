@@ -69,6 +69,11 @@ function setup_config() {
 		ln -snf "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
 		git config --global core.excludesFile "${HOME}/.gitignore_global"
 	fi
+
+	if [[ ! -f "${HOME}/.config/opencode/opencode.json" ]]; then
+		mkdir -p "${HOME}/.config/opencode"
+		ln -snf "${PC_CONFIG_PATH}/config/opencode.json" "${HOME}/.config/opencode/opencode.json"
+	fi
 }
 
 source "${PC_CONFIG_PATH}/Linux/utils.zsh"

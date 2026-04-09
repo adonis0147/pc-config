@@ -144,6 +144,11 @@ EOF
 	if [[ ! -L "${HOME}/.ideavimrc" ]]; then
 		ln -snf "${PC_CONFIG_PATH}/config/ideavimrc" "${HOME}/.ideavimrc"
 	fi
+
+	if [[ ! -f "${HOME}/.config/opencode/opencode.json" ]]; then
+		mkdir -p "${HOME}/.config/opencode"
+		ln -snf "${PC_CONFIG_PATH}/config/opencode.json" "${HOME}/.config/opencode/opencode.json"
+	fi
 }
 
 function install_cellars() {
