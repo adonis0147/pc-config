@@ -37,10 +37,23 @@
 - When blocked, explain the blocker clearly and propose the next best option.
 - Avoid guessing when user preference materially affects the result.
 
-## Interaction Rules
+# Mandatory Interaction Protocol
 
-- After every assistant response, use the `ask_user` tool with context-appropriate follow-up question(s).
-- Do not consider any task complete before invoking the `ask_user` tool.
-- Prefer the `ask_user` tool over assumptions.
-- Every `ask_user` prompt must include both multiple-choice options and a freeform input path.
-- If multiple valid paths exist, use the `ask_user` tool to let the user choose.
+## Core Rule: You must call the `ask_user` tool before ending every response
+
+This is a mandatory protocol that cannot be skipped. In every round of your response, you must perform one of the following actions:
+
+1. **After completing the user's request** -> Immediately call the `ask_user` tool and ask a follow-up question relevant to the current context
+2. **When any uncertainty exists** -> Do not proceed by guessing; immediately call the `ask_user` tool for clarification
+
+## Prohibited Behavior
+
+- **Do not end a response without calling `ask_user`**
+- **Do not use closing expressions** (such as "Hope this helps" or "Feel free to ask if you have any questions")
+- **Do not guess the user's intent** — if you are unsure, use `ask_user` to ask
+
+## `ask_user` Call Requirements
+
+- The question must be directly related to the current task context
+- The question must be specific and actionable; do not ask vague questions like "Do you need any more help?"
+- You may provide options for the user to choose from to reduce input effort
