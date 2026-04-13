@@ -145,10 +145,13 @@ EOF
 		ln -snf "${PC_CONFIG_PATH}/config/ideavimrc" "${HOME}/.ideavimrc"
 	fi
 
-	if [[ ! -L "${HOME}/.config/opencode/opencode.json" ]]; then
-		mkdir -p "${HOME}/.config/opencode"
-		ln -snf "${PC_CONFIG_PATH}/config/opencode.json" "${HOME}/.config/opencode/opencode.json"
-	fi
+	local opencode_configs=('opencode.json' 'tui.json')
+	for config in "${opencode_configs[@]}"; do
+		if [[ ! -L "${HOME}/.config/opencode/${config}" ]]; then
+			mkdir -p "${HOME}/.config/opencode"
+			ln -snf "${PC_CONFIG_PATH}/config/opencode/${config}" "${HOME}/.config/opencode/${config}"
+		fi
+	done
 
 	if [[ ! -L "${HOME}/.copilot/copilot-instructions.md" ]]; then
 		mkdir -p "${HOME}/.copilot"
