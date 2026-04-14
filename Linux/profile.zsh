@@ -31,6 +31,8 @@ function setup_environment() {
 		export GPG_TTY
 	fi
 
+	export COLORTERM='truecolor'
+
 	if command -v nvim >/dev/null; then
 		export EDITOR='nvim'
 		# On Ubuntu: sudo apt install apparmor-utils && sudo aa-disable /usr/bin/man
