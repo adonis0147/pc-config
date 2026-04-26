@@ -41,14 +41,15 @@ function install_prerequisites() {
 	fi
 }
 
-function install_zsh() {
-	if ! command -v zsh &>/dev/null; then
+function install_package() {
+	local package="${1}"
+	if ! command -v "${package}" &>/dev/null; then
 		local OS_DISTRIBUTOR
 		OS_DISTRIBUTOR="$(lsb_release -a 2>/dev/null | sed -n 's/Distributor ID:[[:space:]]*\(.*\)/\1/p')"
 
 		if [[ "${OS_DISTRIBUTOR}" == 'Ubuntu' ]]; then
 			sudo apt update
-			sudo DEBIAN_FRONTEND=noninteractive apt install --yes zsh
+			sudo DEBIAN_FRONTEND=noninteractive apt install --yes "${package}"
 		fi
 	fi
 }
@@ -103,7 +104,8 @@ function install_for_linux() {
 		git clone https://github.com/adonis0147/pc-config "${PC_CONFIG_PATH}"
 	fi
 
-	install_zsh
+	install_package zsh
+	install_package unzip
 	install_zinit
 	setup_zsh
 
