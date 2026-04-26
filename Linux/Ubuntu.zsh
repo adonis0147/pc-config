@@ -23,7 +23,7 @@ Types: deb deb-src
 URIs: http://apt.llvm.org/${codename}/
 Suites: llvm-toolchain-${codename}-22
 Components: main
-Signed-By:
+Signed-By: /etc/apt/trusted.gpg.d/apt.llvm.org.asc
 EOF
 		sudo mv /tmp/llvm-toolchain.sources /etc/apt/sources.list.d/
 		sudo apt update
