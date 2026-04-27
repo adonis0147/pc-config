@@ -17,12 +17,15 @@ function install_packages() {
 	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
 		sudo curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc 2>/dev/null
 	fi
-	if ! grep "llvm-toolchain-${codename}-${llvm_version}" /etc/apt/sources.list.d/llvm-toolchain.list &>/dev/null; then
-		cat >/tmp/llvm-toolchain.list <<EOF
-deb http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
-deb-src http://apt.llvm.org/${codename}/ llvm-toolchain-${codename}-${llvm_version} main
+	if ! grep "llvm-toolchain-${codename}-${llvm_version}" /etc/apt/sources.list.d/llvm-toolchain.sources &>/dev/null; then
+		cat >/tmp/llvm-toolchain.sources <<EOF
+Types: deb deb-src
+URIs: http://apt.llvm.org/${codename}/
+Suites: llvm-toolchain-${codename}-22
+Components: main
+Signed-By:
 EOF
-		sudo mv /tmp/llvm-toolchain.list /etc/apt/sources.list.d/
+		sudo mv /tmp/llvm-toolchain.sources /etc/apt/sources.list.d/
 		sudo apt update
 	fi
 
