@@ -12,35 +12,9 @@ function setup_environment() {
 }
 
 function install_packages() {
-	local llvm_version='22'
-	local codename="$(lsb_release -cs 2>/dev/null)"
-	if [[ ! -f "/etc/apt/trusted.gpg.d/apt.llvm.org.asc" ]]; then
-		sudo curl -L https://apt.llvm.org/llvm-snapshot.gpg.key -o /etc/apt/trusted.gpg.d/apt.llvm.org.asc 2>/dev/null
-	fi
-	if ! grep "llvm-toolchain-${codename}-${llvm_version}" /etc/apt/sources.list.d/llvm-toolchain.sources &>/dev/null; then
-		cat >/tmp/llvm-toolchain.sources <<EOF
-Types: deb deb-src
-URIs: http://apt.llvm.org/${codename}/
-Suites: llvm-toolchain-${codename}-22
-Components: main
-Signed-By: /etc/apt/trusted.gpg.d/apt.llvm.org.asc
-EOF
-		sudo mv /tmp/llvm-toolchain.sources /etc/apt/sources.list.d/
-		sudo apt update
-	fi
-
 	local installed
 	installed="$(apt list --installed 2>/dev/null)"
 	local packages=(
-		"clang-${llvm_version}"
-		"clang-format-${llvm_version}"
-		"clang-tidy-${llvm_version}"
-		"clang-tools-${llvm_version}"
-		"clangd-${llvm_version}"
-		"libc++-${llvm_version}-dev"
-		"libc++abi-${llvm_version}-dev"
-		"lld-${llvm_version}"
-		"lldb-${llvm_version}"
 		'autoconf'
 		'build-essential'
 		'ccache'
@@ -48,6 +22,7 @@ EOF
 		'gdb'
 		'libtool-bin'
 		'ninja-build'
+		'ntpsec-ntpdate' # sudo ntpdate pool.ntp.org
 		'openconnect'
 		'pkg-config'
 		'unzip'
