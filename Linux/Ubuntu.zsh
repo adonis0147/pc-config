@@ -25,6 +25,7 @@ function install_packages() {
 		'ntpsec-ntpdate' # sudo ntpdate pool.ntp.org
 		'openconnect'
 		'pkg-config'
+		'systemd-timesyncd'
 		'unzip'
 		'zip'
 	)
