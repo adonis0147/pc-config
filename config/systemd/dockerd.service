@@ -1,0 +1,10 @@
+[Unit]
+Description=Dockerd Service
+
+[Service]
+Environment=PATH=/opt/docker:/usr/sbin
+ExecStart=/opt/docker/dockerd
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

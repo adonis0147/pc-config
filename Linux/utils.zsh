@@ -41,6 +41,41 @@ function setup_mihomo() {
 	fi
 }
 
+function setup_docker() {
+	local arch
+	arch="$(uname -m)"
+	local base_url="https://download.docker.com/linux/static/stable/${arch}"
+	local version
+
+	version="$(curl -sL "${base_url}" | grep -oP 'docker-\K[0-9]+\.[0-9]+\.[0-9]+(-[0-9]+)?(?=\.tgz)' | sort -V | tail -n 1)"
+
+	if [[ -z "${version}" ]]; then
+		echo -e "\033[31;1mFailed to fetch Docker version\033[0m"
+		return 1
+	fi
+
+	local download_url="${base_url}/docker-${version}.tgz"
+	local install_path="/opt/docker"
+	local tmp_path="/tmp/docker"
+
+	rm -rf "${tmp_path}"
+	mkdir -p "${tmp_path}"
+	if ! curl -L "${download_url}" -o - | tar -xz -C "${tmp_path}" --strip-components=1 ; then
+		echo -e "\033[31;1mFailed to download or extract Docker\033[0m"
+		return 1
+	fi
+
+	sudo rm -rf "${install_path}"
+	sudo mv "${tmp_path}" "${install_path}"
+
+	sudo groupadd -f docker
+	sudo usermod -aG docker "${USER}"
+
+	sudo systemctl enable "${PC_CONFIG_PATH}/config/systemd/dockerd.service"
+
+	newgrp docker
+}
+
 function update_all() {
 	update_zinit
 	update_uv
