@@ -60,10 +60,20 @@ function setup_docker() {
 
 	rm -rf "${tmp_path}"
 	mkdir -p "${tmp_path}"
-	if ! curl -L "${download_url}" -o - | tar -xz -C "${tmp_path}" --strip-components=1 ; then
+	if ! curl -L "${download_url}" -o - | tar -xz -C "${tmp_path}" --strip-components=1; then
 		echo -e "\033[31;1mFailed to download or extract Docker\033[0m"
 		return 1
 	fi
+
+	# install docker buildx
+	mkdir -p "${HOME}/.docker/cli-plugins"
+	if ! curl -L "$(curl -sL 'https://api.github.com/repos/docker/buildx/releases/latest' |
+		sed -n 's|[[:space:]]*"browser_download_url": "\(.*\)\"|\1|p' |
+		grep -E "linux-$(uname -m | sed '{s/aarch64/arm64/; s/x86_64/amd64/}')$")" -o "${HOME}/.docker/cli-plugins/docker-buildx"; then
+		echo -e "\033[31;1mFailed to download docker buildx\033[0m"
+		return 1
+	fi
+	chmod a+x "${HOME}/.docker/cli-plugins/docker-buildx"
 
 	sudo rm -rf "${install_path}"
 	sudo mv "${tmp_path}" "${install_path}"
