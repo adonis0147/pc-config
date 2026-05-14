@@ -1,7 +1,10 @@
 .DS_Store
 
 .java-version
-.mvn
+
+.mvn/*
+!.mvn/wrapper/
+!.mvn/wrapper/**
 
 .gdbinit
 .lldbinit
