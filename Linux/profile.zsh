@@ -79,11 +79,6 @@ function setup_config() {
 			ln -snf "${PC_CONFIG_PATH}/config/opencode/${config}" "${HOME}/.config/opencode/${config}"
 		fi
 	done
-
-	if [[ ! -L "${HOME}/.copilot/copilot-instructions.md" ]]; then
-		mkdir -p "${HOME}/.copilot"
-		ln -snf "${PC_CONFIG_PATH}/config/copilot-instructions.md" "${HOME}/.copilot/copilot-instructions.md"
-	fi
 }
 
 source "${PC_CONFIG_PATH}/Linux/utils.zsh"
