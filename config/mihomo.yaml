@@ -39,6 +39,14 @@ proxies:
     type: direct
     udp: true
 
+  # - name: dialer-socks5
+  #   type: socks5
+  #   server: server
+  #   port: 443
+  #   username: username
+  #   password: password
+  #   dialer-proxy: Dialer
+
 proxy-groups:
   - name: 默认
     type: select
@@ -104,6 +112,11 @@ proxy-groups:
     type: select
     proxies:
       [默认, 香港, 台湾, 日本, 新加坡, 美国, 其它地区, 全部节点, 自动选择, 直连]
+
+  - name: Dialer
+    type: select
+    proxies:
+      [默认]
 
   #分隔,下面是地区分组
   - name: 香港
