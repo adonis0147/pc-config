@@ -39,13 +39,13 @@ proxies:
     type: direct
     udp: true
 
-  # - name: dialer-socks5
+  # - name: 家宽
   #   type: socks5
   #   server: server
   #   port: 443
   #   username: username
   #   password: password
-  #   dialer-proxy: Dialer
+  #   dialer-proxy: 自动选择
 
 proxy-groups:
   - name: 默认
@@ -113,11 +113,6 @@ proxy-groups:
     proxies:
       [默认, 香港, 台湾, 日本, 新加坡, 美国, 其它地区, 全部节点, 自动选择, 直连]
 
-  - name: Dialer
-    type: select
-    proxies:
-      [默认]
-
   #分隔,下面是地区分组
   - name: 香港
     type: select
@@ -164,6 +159,7 @@ proxy-groups:
     type: url-test
     include-all: true
     exclude-type: direct
+    exclude-filter: "^家宽$"
     tolerance: 10
 
 rules:
