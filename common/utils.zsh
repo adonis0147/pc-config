@@ -99,8 +99,11 @@ function update_sdk() {
 		return
 	fi
 
-	content="$(sdk list java)"
-	if echo "${content}" | grep 'INTERNET NOT REACHABLE!' &>/dev/null; then
+	if ! content="$(sdk list java 2>&1)"; then
+		echo "${content}"
+		return
+	fi
+	if [[ -z "${content//[[:space:]]/}" ]] || echo "${content}" | grep 'INTERNET NOT REACHABLE!' &>/dev/null; then
 		echo "${content}"
 		return
 	fi
@@ -109,13 +112,26 @@ function update_sdk() {
 		candidate="$(basename "${candidate}")"
 		local major="${candidate%%.*}"
 		local dist="${candidate/*-}"
-		local latest="$(echo "${content}" | grep -E "\| ${major}\..*-${dist}" | awk '{if (NR == 1) print $NF}')"
+		local latest
+		latest="$(echo "${content}" | grep -E "\| ${major}\..*-${dist}" | awk '{if (NR == 1) print $NF}')"
+		if [[ -z "${latest}" ]]; then
+			echo "Unable to determine the latest java ${major}-${dist} version; keeping ${candidate}."
+			continue
+		fi
 
 		if [[ "${latest}" != "${candidate}" ]]; then
 			if [[ "$(jenv global)" =~ "${major}" ]]; then
-				echo Y | sdk install java "${latest}"
+				if ! echo Y | sdk install java "${latest}"; then
+					continue
+				fi
 			else
-				echo n | sdk install java "${latest}"
+				if ! echo n | sdk install java "${latest}"; then
+					continue
+				fi
+			fi
+			if [[ ! -x "${HOME}/.sdkman/candidates/java/${latest}/bin/java" ]]; then
+				echo "java ${latest} was not installed correctly; keeping ${candidate}."
+				continue
 			fi
 			sdk uninstall java "${candidate}"
 
