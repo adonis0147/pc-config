@@ -108,11 +108,11 @@ function update_sdk() {
 		return
 	fi
 
+	local latest
 	while read -r candidate; do
 		candidate="$(basename "${candidate}")"
 		local major="${candidate%%.*}"
 		local dist="${candidate/*-}"
-		local latest
 		latest="$(echo "${content}" | grep -E "\| ${major}\..*-${dist}" | awk '{if (NR == 1) print $NF}')"
 		if [[ -z "${latest}" ]]; then
 			echo "Unable to determine the latest java ${major}-${dist} version; keeping ${candidate}."
@@ -147,4 +147,13 @@ function update_sdk() {
 			jenv add "${HOME}/.sdkman/candidates/java/${latest}"
 		fi
 	done < <(find "${HOME}/.sdkman/candidates/java" -mindepth 1 -maxdepth 1 ! -name "current")
+}
+
+function choose_proxy() {
+	local node="${1}"
+	local proxy_group="${2:-自动选择}"
+
+	curl -X PUT "http://127.0.0.1:9090/proxies/${proxy_group}" \
+		-H 'Content-Type: application/json' \
+		-d '{"name":"'"${node}"'"}'
 }
