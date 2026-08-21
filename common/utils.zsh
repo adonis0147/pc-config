@@ -149,11 +149,24 @@ function update_sdk() {
 	done < <(find "${HOME}/.sdkman/candidates/java" -mindepth 1 -maxdepth 1 ! -name "current")
 }
 
-function choose_proxy() {
+function mihomo_test_latency() {
+	local proxy_group="${1:-自动选择}"
+	local url='https://www.gstatic.com/generate_204'
+
+	curl -s "http://127.0.0.1:9090/group/${proxy_group}/delay?url=${url}&timeout=5000" |
+		python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+for name, latency in sorted(data.items(), key=lambda x: x[1], reverse=True):
+    print(f"{latency:5}ms\t{name}")
+'
+}
+
+function mihomo_choose_proxy() {
 	local node="${1}"
 	local proxy_group="${2:-自动选择}"
 
 	curl -X PUT "http://127.0.0.1:9090/proxies/${proxy_group}" \
 		-H 'Content-Type: application/json' \
-		-d '{"name":"'"${node}"'"}'
+		-d "{\"name\": \"${node}\"}"
 }
