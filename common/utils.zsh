@@ -112,7 +112,7 @@ function update_sdk() {
 	while read -r candidate; do
 		candidate="$(basename "${candidate}")"
 		local major="${candidate%%.*}"
-		local dist="${candidate/*-}"
+		local dist="${candidate/*-/}"
 		latest="$(echo "${content}" | grep -E "\| ${major}\..*-${dist}" | awk '{if (NR == 1) print $NF}')"
 		if [[ -z "${latest}" ]]; then
 			echo "Unable to determine the latest java ${major}-${dist} version; keeping ${candidate}."
@@ -147,6 +147,22 @@ function update_sdk() {
 			jenv add "${HOME}/.sdkman/candidates/java/${latest}"
 		fi
 	done < <(find "${HOME}/.sdkman/candidates/java" -mindepth 1 -maxdepth 1 ! -name "current")
+}
+
+function mihomo_refresh_subscriptions() {
+	local provider
+
+	curl -s 'http://127.0.0.1:9090/providers/proxies' |
+		python3 -c '
+import json, sys, urllib.parse
+data = json.load(sys.stdin)
+for name, provider in data["providers"].items():
+    if provider.get("vehicleType") in ("HTTP", "File"):
+        print(urllib.parse.quote(name, safe=""))
+' | while IFS= read -r provider; do
+		echo "Refreshing: ${provider}"
+		curl -fsS -X PUT "http://127.0.0.1:9090/providers/proxies/${provider}"
+	done
 }
 
 function mihomo_test_latency() {
