@@ -168,6 +168,7 @@ function install_cellars() {
 		lld
 		llvm
 		mihomo
+		mpv
 		ninja
 		python
 		tmux
@@ -182,7 +183,7 @@ function install_cellars() {
 
 	for cellar in "${cellars[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/opt/${cellar}" ]]; then
-			brew install --formula "${cellar}"
+			brew install --formula --yes "${cellar}"
 		fi
 	done
 }
@@ -193,7 +194,6 @@ function install_casks() {
 		karabiner-elements
 		keka
 		snipaste
-		stolendata-mpv
 		wezterm
 	)
 	if [[ "${major_version}" -ge 13 ]]; then
@@ -204,7 +204,7 @@ function install_casks() {
 
 	for cask in "${casks[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/Caskroom/${cask}" ]]; then
-			brew install --cask "${cask}"
+			brew install --cask --yes "${cask}"
 		fi
 	done
 }
