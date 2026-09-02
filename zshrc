@@ -141,6 +141,8 @@ function setup() {
 		done
 	fi
 
+	# Wide Unicode history entries can corrupt ZLE's autosuggestion redraw.
+	typeset -g ZSH_AUTOSUGGEST_HISTORY_IGNORE='*[^[:ascii:]]*'
 	zinit wait lucid blockf for \
 		atload'zicompinit; zicdreplay; _zsh_autosuggest_start' zsh-users/zsh-autosuggestions \
 		as'null' atload' source completions' "${COMPLETIONS_PATH}"
