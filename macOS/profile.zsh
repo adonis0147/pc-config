@@ -168,7 +168,6 @@ function install_cellars() {
 		lld
 		llvm
 		mihomo
-		mpv
 		ninja
 		python
 		tmux
@@ -177,6 +176,7 @@ function install_cellars() {
 	if [[ "${major_version}" -ge 13 ]]; then
 		cellars+=(
 			ccache
+			mpv
 			neovim
 		)
 	fi
