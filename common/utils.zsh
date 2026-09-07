@@ -189,13 +189,16 @@ function mihomo_choose_proxy() {
 
 function setup_pi_settings() {
 	local pi_settings="${HOME}/.pi/agent/settings.json"
+	local pi_plan_mode_settings="${HOME}/.pi/agent/pi-plan-mode.json"
+	local pi_settings_template="${PC_CONFIG_PATH}/config/pi/settings.json"
+	local pi_custom_settings="${PC_CONFIG_PATH}/config/pi/custom-settings.json"
+
+	mkdir -p "${pi_settings:h}"
+	ln -f "${PC_CONFIG_PATH}/config/pi/pi-plan-mode.json" "${pi_plan_mode_settings}"
+
 	if [[ -e "${pi_settings}" || -L "${pi_settings}" ]]; then
 		return
 	fi
-
-	local pi_settings_template="${PC_CONFIG_PATH}/config/pi/settings.json"
-	local pi_custom_settings="${PC_CONFIG_PATH}/config/pi/custom-settings.json"
-	mkdir -p "${pi_settings:h}"
 	if [[ ! -f "${pi_custom_settings}" ]]; then
 		cp "${pi_settings_template}" "${pi_settings}"
 		return
