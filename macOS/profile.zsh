@@ -152,6 +152,8 @@ EOF
 			ln -snf "${PC_CONFIG_PATH}/config/opencode/${config}" "${HOME}/.config/opencode/${config}"
 		fi
 	done
+
+	setup_pi_settings
 }
 
 function install_cellars() {
@@ -165,6 +167,7 @@ function install_cellars() {
 		gnu-getopt
 		gnu-tar
 		htop
+		jq
 		lld
 		llvm
 		mihomo

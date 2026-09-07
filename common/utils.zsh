@@ -186,3 +186,30 @@ function mihomo_choose_proxy() {
 		-H 'Content-Type: application/json' \
 		-d "{\"name\": \"${node}\"}"
 }
+
+function setup_pi_settings() {
+	local pi_settings="${HOME}/.pi/agent/settings.json"
+	if [[ -e "${pi_settings}" || -L "${pi_settings}" ]]; then
+		return
+	fi
+
+	local pi_settings_template="${PC_CONFIG_PATH}/config/pi/settings.json"
+	local pi_custom_settings="${PC_CONFIG_PATH}/config/pi/custom-settings.json"
+	mkdir -p "${pi_settings:h}"
+	if [[ ! -f "${pi_custom_settings}" ]]; then
+		cp "${pi_settings_template}" "${pi_settings}"
+		return
+	fi
+
+	local pi_settings_tmp="${pi_settings}.tmp"
+	if ! jq -s '
+		.[0] as $template | .[1] as $custom |
+		($template * $custom) |
+		.packages = reduce (($template.packages // []) + ($custom.packages // []))[] as $package
+			([]; if index($package) then . else . + [$package] end)
+	' "${pi_settings_template}" "${pi_custom_settings}" >"${pi_settings_tmp}"; then
+		rm -f "${pi_settings_tmp}"
+		return 1
+	fi
+	mv "${pi_settings_tmp}" "${pi_settings}"
+}

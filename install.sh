@@ -106,6 +106,7 @@ function install_for_linux() {
 
 	install_package zsh
 	install_package unzip
+	install_package jq
 	install_zinit
 	setup_zsh
 

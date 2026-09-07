@@ -79,6 +79,8 @@ function setup_config() {
 			ln -snf "${PC_CONFIG_PATH}/config/opencode/${config}" "${HOME}/.config/opencode/${config}"
 		fi
 	done
+
+	setup_pi_settings
 }
 
 source "${PC_CONFIG_PATH}/Linux/utils.zsh"

@@ -1,0 +1,7 @@
+{
+  "theme": "dark",
+  "packages": [
+    "npm:pi-context-view",
+    "npm:pi-web-access"
+  ]
+}
