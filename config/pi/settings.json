@@ -1,6 +1,7 @@
 {
   "theme": "dark",
   "packages": [
+    "git:github.com/DietrichGebert/ponytail",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@juicesharp/rpiv-todo",
     "npm:@narumitw/pi-plan-mode",
