@@ -8,6 +8,7 @@
     "npm:@tintinweb/pi-tasks",
     "npm:pi-btw",
     "npm:pi-context-view",
+    "npm:pi-review",
     "npm:pi-subagents-lite",
     "npm:pi-web-access",
     "npm:pi-zentui"
