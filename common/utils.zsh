@@ -192,8 +192,10 @@ function setup_pi_settings() {
 	local pi_plan_mode_settings="${HOME}/.pi/agent/pi-plan-mode.json"
 	local pi_settings_template="${PC_CONFIG_PATH}/config/pi/settings.json"
 	local pi_custom_settings="${PC_CONFIG_PATH}/config/pi/custom-settings.json"
+	local ponytail_config="${HOME}/.config/ponytail/config.json"
 
-	mkdir -p "${pi_settings:h}"
+	mkdir -p "${pi_settings:h}" "${ponytail_config:h}"
+	ln -snf "${PC_CONFIG_PATH}/config/pi/ponytail.json" "${ponytail_config}"
 	ln -f "${PC_CONFIG_PATH}/config/pi/pi-plan-mode.json" "${pi_plan_mode_settings}"
 
 	if [[ -e "${pi_settings}" || -L "${pi_settings}" ]]; then
