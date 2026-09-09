@@ -80,7 +80,6 @@ function setup_config() {
 		fi
 	done
 
-	setup_pi_settings
 }
 
 source "${PC_CONFIG_PATH}/Linux/utils.zsh"

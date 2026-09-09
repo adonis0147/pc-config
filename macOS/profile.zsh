@@ -153,7 +153,6 @@ EOF
 		fi
 	done
 
-	setup_pi_settings
 }
 
 function install_cellars() {
