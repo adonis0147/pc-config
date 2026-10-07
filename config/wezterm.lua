@@ -1,7 +1,34 @@
-local wezterm = require 'wezterm'
+local wezterm = require "wezterm"
+local function latest_node()
+	local nodes =
+		wezterm.glob(
+			wezterm.home_dir .. "/.local/share/zinit/plugins/nvm/versions/node/*/bin/node"
+		)
+	table.sort(nodes, function(a, b)
+		local left = { a:match("/v(%d+)%.(%d+)%.(%d+)/bin/node$") }
+		local right = { b:match("/v(%d+)%.(%d+)%.(%d+)/bin/node$") }
+		for i = 1, 3 do
+			if tonumber(left[i]) ~= tonumber(right[i]) then
+				return tonumber(left[i]) > tonumber(right[i])
+			end
+		end
+		return false
+	end)
+	return assert(nodes[1], "No installed NVM Node version found")
+end
+
+local node = latest_node()
+local bridge =
+	dofile(
+		wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/wezterm.lua"
+	)
+bridge.setup {
+	helper = wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/macos-helper.ts",
+	node = node,
+}
 
 local get_os_type = function()
-	local patterns = { '%-apple%-', '%-linux%-', '%-windows%-' }
+	local patterns = { "%-apple%-", "%-linux%-", "%-windows%-" }
 	local type = nil
 	for _, pattern in ipairs(patterns) do
 		local s, e = string.find(wezterm.target_triple, pattern)
@@ -13,18 +40,20 @@ local get_os_type = function()
 end
 
 local setup_common = function(config)
-	config.audible_bell   = 'Disabled'
+	config.audible_bell = "Disabled"
 	config.enable_tab_bar = false
-	config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
-	config.color_scheme   = 'Monokai (dark) (terminal.sexy)'
-	config.font_size      = 16.0
+	config.window_padding = {
+		left = 0,
+		right = 0,
+		top = 0,
+		bottom = 0,
+	}
+	config.color_scheme = "Monokai (dark) (terminal.sexy)"
+	config.font_size = 16.0
 end
 
 local setup_for_apple = function(config)
-	config.font = wezterm.font_with_fallback {
-		'SF Mono',
-		'PingFang SC',
-	}
+	config.font = wezterm.font_with_fallback { "SF Mono", "PingFang SC" }
 end
 
 local setup_for_windows = function(config)
@@ -36,13 +65,12 @@ end
 
 local setup_for_specific_os = function(config)
 	local os_type = get_os_type()
-	if os_type == 'apple' then
+	if os_type == "apple" then
 		setup_for_apple(config)
-	elseif os_type == 'windows' then
+	elseif os_type == "windows" then
 		setup_for_windows(config)
 	end
 end
-
 
 local config = wezterm.config_builder()
 
