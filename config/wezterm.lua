@@ -14,18 +14,36 @@ local function latest_node()
 		end
 		return false
 	end)
-	return assert(nodes[1], "No installed NVM Node version found")
+	if nodes[1] then
+		return nodes[1]
+	end
+	local windows = wezterm.target_triple:find("windows", 1, true)
+	local separator = windows and ";" or ":"
+	local path = os.getenv("PATH") or ""
+	if wezterm.target_triple:find("apple", 1, true) then
+		path = path .. ":/opt/homebrew/bin:/usr/local/bin"
+	end
+	for directory in path:gmatch("[^" .. separator .. "]+") do
+		local candidate = directory .. (windows and "/node.exe" or "/node")
+		local file = io.open(candidate, "rb")
+		if file then
+			file:close()
+			return candidate
+		end
+	end
 end
 
 local node = latest_node()
-local bridge =
-	dofile(
-		wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/wezterm.lua"
-	)
-bridge.setup {
-	helper = wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/macos-helper.ts",
-	node = node,
-}
+if node then
+	local bridge =
+		dofile(
+			wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/wezterm.lua"
+		)
+	bridge.setup {
+		helper = wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/macos-helper.ts",
+		node = node,
+	}
+end
 
 local get_os_type = function()
 	local patterns = { "%-apple%-", "%-linux%-", "%-windows%-" }
