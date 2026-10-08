@@ -1,4 +1,5 @@
 local wezterm = require "wezterm"
+
 local function latest_node()
 	local nodes =
 		wezterm.glob(
@@ -33,16 +34,19 @@ local function latest_node()
 	end
 end
 
-local node = latest_node()
-if node then
-	local bridge =
-		dofile(
-			wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/wezterm.lua"
-		)
-	bridge.setup {
-		helper = wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/macos-helper.ts",
-		node = node,
-	}
+local bridge_path = wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/wezterm.lua"
+local bridge_file = io.open(bridge_path, "r")
+if bridge_file then
+	bridge_file:close()
+
+	local node = latest_node()
+	if node then
+		local bridge = dofile(bridge_path)
+		bridge.setup {
+			helper = wezterm.home_dir .. "/.config/pi-config/src/extensions/clipboard-image/macos-helper.ts",
+			node = node,
+		}
+	end
 end
 
 local get_os_type = function()
