@@ -67,9 +67,14 @@ function setup_config() {
 		popd >/dev/null
 	fi
 
-	if command -v git &>/dev/null && [[ ! -L "${HOME}/.gitignore_global" ]]; then
-		ln -snf "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
-		git config --global core.excludesFile "${HOME}/.gitignore_global"
+	if command -v git &>/dev/null; then
+		if [[ ! -L "${HOME}/.gitignore_global" ]]; then
+			ln -snf "${PC_CONFIG_PATH}/config/gitignore_global" "${HOME}/.gitignore_global"
+			git config --global core.excludesFile "${HOME}/.gitignore_global"
+		fi
+		if ! git config --get-all credential.helper >/dev/null; then
+			git config --global credential.helper 'cache --timeout=2592000'
+		fi
 	fi
 
 	local opencode_configs=('opencode.json' 'tui.json')

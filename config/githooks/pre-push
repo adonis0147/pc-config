@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+function require_signed_commits() {
+	local remote="$1"
+	local _local_ref local_sha _remote_ref remote_sha commits commit
+
+	while read -r _local_ref local_sha _remote_ref remote_sha; do
+		# Deleted refs do not introduce commits.
+		[[ "${local_sha}" =~ ^0+$ ]] && continue
+
+		if [[ "${remote_sha}" =~ ^0+$ ]]; then
+			commits="$(git rev-list "${local_sha}" --not --remotes="${remote}")"
+		else
+			commits="$(git rev-list "${remote_sha}..${local_sha}")"
+		fi
+
+		for commit in ${commits}; do
+			if ! git verify-commit "${commit}" >/dev/null 2>&1; then
+				echo "Push blocked: ${commit} has no verifiable signature." >&2
+				return 1
+			fi
+		done
+	done
+}
+
+require_signed_commits "$@"

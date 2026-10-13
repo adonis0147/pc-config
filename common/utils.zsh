@@ -1,3 +1,8 @@
+# Use shared hooks for the current repository without copying any files.
+function setup_git_hooks() {
+	git config --local core.hooksPath "${PC_CONFIG_PATH}/config/githooks"
+}
+
 function install_rust() {
 	if ! bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- \
 		-y --no-modify-path -c rust-src,rust-analyzer; then
