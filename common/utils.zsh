@@ -81,6 +81,11 @@ function install_sdkman() {
 function update_sdk() {
 	echo -e "\033[32;1m======== Update SDK ========\033[0m"
 
+	if ! sdk selfupdate; then
+		echo -e "\033[31;1mFailed to update sdkman.\033[0m"
+		return
+	fi
+
 	local candidate
 	local content
 	if ! content="$(echo n | sdk upgrade)"; then
