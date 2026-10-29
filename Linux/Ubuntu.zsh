@@ -19,13 +19,12 @@ function install_packages() {
 		'build-essential'
 		'ccache'
 		'cmake'
+		'chrony'
 		'gdb'
 		'libtool-bin'
 		'ninja-build'
-		'ntpsec-ntpdate' # sudo ntpdate pool.ntp.org
 		'openconnect'
 		'pkg-config'
-		'systemd-timesyncd'
 		'unzip'
 		'zip'
 	)
@@ -51,6 +50,15 @@ function install_snaps() {
 	done
 }
 
+function setup_config() {
+	if ! [[ -f /etc/chrony/conf.d/resume.conf ]]; then
+		echo 'makestep 1.0 -1' | sudo tee /etc/chrony/conf.d/resume.conf >/dev/null
+		sudo systemctl enable --now chrony
+		sudo systemctl restart chrony
+	fi
+}
+
 setup_environment
 install_packages
 install_snaps
+setup_config
