@@ -81,7 +81,7 @@ function install_terminfo() {
 	mkdir "${ncurses}/build"
 	cd "${ncurses}/build"
 	../configure --prefix="$(pwd)/ncurses" --disable-widec --with-default-terminfo-dir="${PC_CONFIG_PATH}/terminfo"
-	make -j "$(nproc)"
+	make -j "$(sysctl -n hw.ncpu)"
 	make install
 	popd
 
