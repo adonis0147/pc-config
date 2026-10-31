@@ -16,20 +16,27 @@ function setup_mihomo() {
 	local url="${1}"
 	local ui_host="${2}"
 	local config="${PC_CONFIG_PATH}/config/mihomo.yaml"
-	local service_status
+	local config_content service_status
 
 	if [[ -z "${ui_host}" ]]; then
 		ui_host='127.0.0.1'
 	fi
 
-	sed "{
+	config_content=$(sed "{
 		s|\(external-controller: \).*|\1\"${ui_host}:9090\"|
 		s|\(url: \)\"\"|\1\"${url}\"|
-	}" "${config}" >"${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
+	}" "${config}")
 
-	service_status="$(brew services | grep mihomo | awk '{print $2}')"
-	if [[ "${service_status}" == 'none' ]]; then
-		brew services start mihomo
+	if [[ "${PACKAGE_MANAGER}" == 'homebrew' ]]; then
+		printf '%s\n' "${config_content}" >"${HOMEBREW_PREFIX}/etc/mihomo/config.yaml"
+		service_status="$(brew services | grep mihomo | awk '{print $2}')"
+		if [[ "${service_status}" == 'none' ]]; then
+			brew services start mihomo
+		fi
+	else
+		sudo mkdir -p /opt/local/etc/mihomo
+		printf '%s\n' "${config_content}" | sudo tee /opt/local/etc/mihomo/config.yaml >/dev/null
+		sudo port load mihomo
 	fi
 }
 
