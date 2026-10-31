@@ -259,7 +259,6 @@ function install_packages() {
 		install_ports
 	fi
 	install_casks
-	unhash bash 2>/dev/null || true
 }
 
 function unset_variables() {

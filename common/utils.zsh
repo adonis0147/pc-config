@@ -74,7 +74,7 @@ function update_node() {
 
 function install_sdkman() {
 	if [[ ! -d "${HOME}/.sdkman" ]]; then
-		curl -s "https://get.sdkman.io" | sed '/^sdkman_init_snippet/,/^)/d' | bash
+		curl -s "https://get.sdkman.io?rcupdate=false" | env bash
 	fi
 }
 
