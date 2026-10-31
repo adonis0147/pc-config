@@ -35,9 +35,34 @@ function log_error() {
 	exit 1
 }
 
+function install_macports() (
+	local os url tmp
+	os=$(sw_vers -productVersion |
+		awk -F. '{print ($1 == 10 ? $1 "." $2 : $1)}')
+
+	url=$(curl -fsSL https://guide.macports.org/ |
+		grep -oE "https://github.com/macports/macports-base/releases/download/[^\" ]*/MacPorts-[^-]+-${os}-[^\" ]+\.pkg") ||
+		log_error "Could not find a MacPorts package URL for macOS ${os}"
+
+	log_info "MacPorts package: ${url}"
+
+	tmp="$(mktemp -d)"
+	trap 'rm -rf "${tmp}"' EXIT
+	curl -fL "${url}" -o "${tmp}/MacPorts.pkg"
+	sudo installer -pkg "${tmp}/MacPorts.pkg" -target /
+)
+
 function install_prerequisites() {
-	if ! command -v brew &>/dev/null; then
+	local manager="${1}"
+
+	if [[ ! -x /opt/homebrew/bin/brew && ! -x /usr/local/bin/brew ]]; then
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	fi
+
+	if [[ "${manager}" == 'macports' ]]; then
+		if [[ ! -x /opt/local/bin/port ]]; then
+			install_macports
+		fi
 	fi
 }
 
@@ -76,7 +101,26 @@ function setup_zsh() {
 }
 
 function install_for_macos() {
-	install_prerequisites
+	local options
+	options=$(getopt -n "${0}" -o '' -l macports -- "${@}") || return 1
+	eval set -- "${options}"
+
+	local manager="homebrew"
+	while true; do
+		case "${1}" in
+		--macports)
+			manager="macports"
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+		*) ;;
+		esac
+	done
+
+	install_prerequisites "${manager}"
 
 	if [[ ! -d "${PC_CONFIG_PATH}" ]]; then
 		git clone https://github.com/adonis0147/pc-config "${PC_CONFIG_PATH}"
@@ -87,13 +131,18 @@ function install_for_macos() {
 
 	ln -snf "${PC_CONFIG_PATH}/macOS/profile.zsh" "${HOME}/.zprofile"
 
+	local content="export PACKAGE_MANAGER='${manager}'"
+	if ! grep "${content}" "${PC_CONFIG_PATH}/macOS/env.zsh" &>/dev/null; then
+		echo "${content}" >>"${PC_CONFIG_PATH}/macOS/env.zsh"
+	fi
+
 	local HOMEBREW_PREFIX
 	if [[ "$(uname -m)" == 'arm64' ]]; then
 		HOMEBREW_PREFIX='/opt/homebrew'
 	else
 		HOMEBREW_PREFIX='/usr/local'
 	fi
-	local content="export HOMEBREW_PREFIX='${HOMEBREW_PREFIX}'"
+	content="export HOMEBREW_PREFIX='${HOMEBREW_PREFIX}'"
 	if ! grep "${content}" "${PC_CONFIG_PATH}/macOS/env.zsh" &>/dev/null; then
 		echo "${content}" >>"${PC_CONFIG_PATH}/macOS/env.zsh"
 	fi
@@ -141,12 +190,12 @@ function install() {
 	kernel="$(uname -s)"
 
 	if [[ "${kernel}" == 'Darwin' ]]; then
-		install_for_macos
+		install_for_macos "${@}"
 	elif [[ "${kernel}" == 'Linux' ]]; then
-		install_for_linux
+		install_for_linux "${@}"
 	fi
 
 	zsh -i -c 'set -e; source "${HOME}/.zprofile"'
 }
 
-install
+install "${@}"

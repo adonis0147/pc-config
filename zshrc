@@ -87,13 +87,6 @@ function setup() {
 		atpull'%atclone'
 	zinit light tree-sitter/tree-sitter
 
-	if [[ "${system_info}" =~ Darwin.*x86_64 ]]; then
-		zinit ice wait lucid from'gh-r' as'program' \
-			atclone'folder="$(find . -mindepth 1 -maxdepth 1 -type d -name "ccache-*")"; mv "${folder}"/* .; rmdir "${folder}"' \
-			atpull'%atclone'
-		zinit light ccache/ccache
-	fi
-
 	if [[ "${system_info}" =~ Linux ]]; then
 		zinit ice wait lucid from'gh-r' as'program' id-as \
 			atclone'mv mihomo-* mihomo; chmod a+x mihomo' \

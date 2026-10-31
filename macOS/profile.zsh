@@ -9,30 +9,16 @@ if [[ -f "${PC_CONFIG_PATH}/macOS/env.zsh" ]]; then
 	source "${PC_CONFIG_PATH}/macOS/env.zsh"
 fi
 
-function change_homebrew_mirror() {
-	local contents=(
-		"export HOMEBREW_API_DOMAIN='https://mirrors.aliyun.com/homebrew-bottles/api'"
-		"export HOMEBREW_BOTTLE_DOMAIN='https://mirrors.aliyun.com/homebrew/homebrew-bottles'"
-	)
-
-	local changed=false
-	for content in "${contents[@]}"; do
-		if ! grep "${content}" "${PC_CONFIG_PATH}/macOS/env.zsh" &>/dev/null; then
-			echo -e "${content}" >>"${PC_CONFIG_PATH}/macOS/env.zsh"
-			changed=true
-		fi
-	done
-
-	if "${changed}"; then
-		source "${PC_CONFIG_PATH}/macOS/env.zsh"
-		brew update
-	fi
-}
+export PACKAGE_MANAGER="${PACKAGE_MANAGER:-homebrew}"
 
 function setup_path() {
-	local user_paths=(
-		"${HOMEBREW_PREFIX}/bin"
-		"${HOMEBREW_PREFIX}/sbin"
+	local user_paths=()
+	if [[ "${PACKAGE_MANAGER}" == 'homebrew' ]]; then
+		user_paths=("${HOMEBREW_PREFIX}/bin" "${HOMEBREW_PREFIX}/sbin")
+	elif [[ "${PACKAGE_MANAGER}" == 'macports' ]]; then
+		user_paths=('/opt/local/bin' '/opt/local/sbin')
+	fi
+	user_paths+=(
 		"${HOME}/.local/bin"
 		"${HOME}/.local/sbin"
 		"${HOME}/.local/share/nvim/mason/bin"
@@ -43,14 +29,16 @@ function setup_path() {
 		PATH="${p}:${PATH}"
 	done
 
-	local cellars=(
-		curl
-		gnu-getopt
-		llvm
-	)
-	for cellar in "${cellars[@]}"; do
-		PATH="${HOMEBREW_PREFIX}/opt/${cellar}/bin:${PATH}"
-	done
+	if [[ "${PACKAGE_MANAGER}" == 'homebrew' ]]; then
+		local cellars=(
+			curl
+			gnu-getopt
+			llvm
+		)
+		for cellar in "${cellars[@]}"; do
+			PATH="${HOMEBREW_PREFIX}/opt/${cellar}/bin:${PATH}"
+		done
+	fi
 
 	export PATH
 }
@@ -66,9 +54,13 @@ function setup_environment() {
 		export MANPAGER='nvim +Man!'
 	fi
 
-	if [[ -s "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh" ]]; then
-		source "${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh"
+	local autojump
+	if [[ "${PACKAGE_MANAGER}" == 'homebrew' ]]; then
+		autojump="${HOMEBREW_PREFIX}/opt/autojump/etc/profile.d/autojump.sh"
+	elif [[ "${PACKAGE_MANAGER}" == 'macports' ]]; then
+		autojump='/opt/local/etc/profile.d/autojump.sh'
 	fi
+	[[ -s "${autojump}" ]] && source "${autojump}"
 
 	if command -v gtar >/dev/null; then
 		alias tar='gtar'
@@ -159,6 +151,7 @@ function install_cellars() {
 	local cellars=(
 		autojump
 		bash
+		ccache
 		cmake
 		coreutils
 		curl
@@ -170,18 +163,13 @@ function install_cellars() {
 		lld
 		llvm
 		mihomo
+		mpv
+		neovim
 		ninja
 		python
 		tmux
 		wget
 	)
-	if [[ "${major_version}" -ge 13 ]]; then
-		cellars+=(
-			ccache
-			mpv
-			neovim
-		)
-	fi
 
 	for cellar in "${cellars[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/opt/${cellar}" ]]; then
@@ -206,9 +194,57 @@ function install_casks() {
 
 	for cask in "${casks[@]}"; do
 		if [[ ! -d "${HOMEBREW_PREFIX}/Caskroom/${cask}" ]]; then
-			brew install --cask --yes "${cask}"
+			"${HOMEBREW_PREFIX}/bin/brew" install --cask --yes "${cask}"
 		fi
 	done
+}
+
+function install_ports() {
+	local installed
+	installed="$(port installed | sed -n '2,$p' | awk '{print $1}')"
+
+	local ports=(
+		autojump
+		bash
+		ccache
+		clang-23
+		cmake
+		coreutils
+		curl
+		gnutar
+		go
+		htop
+		jq
+		mihomo # sudo port -N -s install mihomo +logging
+		neovim
+		ninja
+		python315
+		tmux
+		util-linux
+		wget
+	)
+
+	for port in "${ports[@]}"; do
+		if ! printf '%s\n' "${installed}" | grep -qxF "${port}"; then
+			sudo port -N install "${port}"
+		fi
+	done
+
+	ports=(git)
+	for port in "${ports[@]}"; do
+		if ! printf '%s\n' "${installed}" | grep -qxF "${port}"; then
+			sudo port -N -s install "${port}"
+		fi
+	done
+}
+
+function install_packages() {
+	if [[ "${PACKAGE_MANAGER}" == 'homebrew' ]]; then
+		install_cellars
+	elif [[ "${PACKAGE_MANAGER}" == 'macports' ]]; then
+		install_ports
+	fi
+	install_casks
 }
 
 function unset_variables() {
@@ -219,8 +255,7 @@ function unset_variables() {
 source "${PC_CONFIG_PATH}/macOS/utils.zsh"
 
 setup_environment
-install_cellars
-install_casks
+install_packages
 install_uv
 install_sdkman
 setup_config
