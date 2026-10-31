@@ -101,23 +101,26 @@ function setup_zsh() {
 }
 
 function install_for_macos() {
-	local options
-	options=$(getopt -n "${0}" -o '' -l macports -- "${@}") || return 1
+	local arg options
+	local -a args=()
+
+	# Apple's getopt only supports short options.
+	for arg in "${@}"; do
+		case "${arg}" in
+		--macports) args+=("-m") ;;
+		*) log_error "Unknown argument: ${arg}" ;;
+		esac
+	done
+
+	options=$(/usr/bin/getopt m "${args[@]}") || return 1
 	eval set -- "${options}"
 
 	local manager="homebrew"
-	while true; do
+	while [[ "${1}" != "--" ]]; do
 		case "${1}" in
-		--macports)
-			manager="macports"
-			shift
-			;;
-		--)
-			shift
-			break
-			;;
-		*) ;;
+		-m) manager="macports" ;;
 		esac
+		shift
 	done
 
 	install_prerequisites "${manager}"
