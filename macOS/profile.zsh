@@ -203,11 +203,14 @@ function install_ports() {
 	local installed
 	installed="$(port installed | sed -n '2,$p' | awk '{print $1}')"
 
+	local python_version='3.15'
+	local llvm_version='23'
+
 	local ports=(
 		autojump
 		bash
 		ccache
-		clang-23
+		"clang-${llvm_version}"
 		cmake
 		coreutils
 		curl
@@ -215,10 +218,11 @@ function install_ports() {
 		go
 		htop
 		jq
+		"lldb-${llvm_version}"
 		mihomo # sudo port -N -s install mihomo +logging
 		neovim
 		ninja
-		python315
+		"python${python_version//./}"
 		tmux
 		util-linux
 		wget
@@ -236,6 +240,16 @@ function install_ports() {
 			sudo port -N -s install "${port}"
 		fi
 	done
+
+	if [[ ! /opt/local/bin/python3 -ef "/opt/local/bin/python${python_version}" ]]; then
+		sudo port select --set python3 "python${python_version//./}"
+	fi
+	if [[ ! /opt/local/bin/clang -ef "/opt/local/bin/clang-mp-${llvm_version}" ]]; then
+		sudo port select --set clang "mp-clang-${llvm_version}"
+	fi
+	if [[ ! /opt/local/bin/lldb -ef "/opt/local/bin/lldb-mp-${llvm_version}" ]]; then
+		sudo port select --set lldb "mp-lldb-${llvm_version}"
+	fi
 }
 
 function install_packages() {
