@@ -56,6 +56,11 @@ function disable_wifi_web_proxy() {
 	networksetup -setsecurewebproxystate "${service}" off
 }
 
+function update_ports() {
+	sudo env https_proxy="${https_proxy}" RSYNC_PROXY="${https_proxy#http://}" port -v selfupdate || return $?
+	sudo env https_proxy="${https_proxy}" port upgrade outdated
+}
+
 function update_all() {
 	local macos_version
 	macos_version="$(sw_vers -productVersion)"
