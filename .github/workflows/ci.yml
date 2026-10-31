@@ -6,13 +6,16 @@ on:
 jobs:
   macos:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        args: ['', '--macports']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Run install script
         run: |
-          bash install.sh
+          bash install.sh ${{ matrix.args }}
 
   linux:
     runs-on: ubuntu-latest
