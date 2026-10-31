@@ -53,8 +53,10 @@ function install_snaps() {
 function setup_config() {
 	if ! [[ -f /etc/chrony/conf.d/resume.conf ]]; then
 		echo 'makestep 1.0 -1' | sudo tee /etc/chrony/conf.d/resume.conf >/dev/null
-		sudo systemctl enable --now chrony
-		sudo systemctl restart chrony
+		if [[ -d /run/systemd/system ]]; then
+			sudo systemctl enable --now chrony
+			sudo systemctl restart chrony
+		fi
 	fi
 }
 
