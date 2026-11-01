@@ -207,37 +207,31 @@ function install_ports() {
 	local llvm_version='23'
 
 	local ports=(
-		autojump
+		mihomo # sudo port -N -s install mihomo +logging
 		bash
-		ccache
-		"clang-${llvm_version}"
-		cmake
 		coreutils
-		curl
 		gnutar
+		util-linux
+		ccache
+		cmake
+		ninja
+		tmux
+		"clang-${llvm_version}"
+		"lldb-${llvm_version}"
+		"python${python_version//./}"
+		autojump
+		curl
+		git
 		go
 		htop
 		jq
-		"lldb-${llvm_version}"
-		mihomo # sudo port -N -s install mihomo +logging
 		neovim
-		ninja
-		"python${python_version//./}"
-		tmux
-		util-linux
 		wget
 	)
 
 	for port in "${ports[@]}"; do
 		if ! printf '%s\n' "${installed}" | grep -qxF "${port}"; then
 			sudo port -N install "${port}"
-		fi
-	done
-
-	ports=(git)
-	for port in "${ports[@]}"; do
-		if ! printf '%s\n' "${installed}" | grep -qxF "${port}"; then
-			sudo port -N -s install "${port}"
 		fi
 	done
 
