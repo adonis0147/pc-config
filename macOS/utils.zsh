@@ -56,9 +56,22 @@ function disable_wifi_web_proxy() {
 	networksetup -setsecurewebproxystate "${service}" off
 }
 
+function setup_macports_proxy() {
+	local url="${1%/}"
+	local proxy="${url#http://}"
+	sudo sed -E -i .bak \
+		-e '/^[[:space:]]*#?[[:space:]]*proxy_(override_env|http|https|rsync)[[:space:]]/d' \
+		-e "\$a\\
+proxy_override_env yes\\
+proxy_http ${proxy}\\
+proxy_https ${proxy}\\
+proxy_rsync ${proxy}
+" /opt/local/etc/macports/macports.conf
+}
+
 function update_ports() {
-	sudo env https_proxy="${https_proxy}" RSYNC_PROXY="${https_proxy#http://}" port -v selfupdate || return $?
-	sudo env https_proxy="${https_proxy}" port upgrade outdated
+	sudo port -v selfupdate || return $?
+	sudo port upgrade outdated
 }
 
 function update_all() {
