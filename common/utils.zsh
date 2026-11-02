@@ -41,13 +41,8 @@ function install_uv() {
 
 	if command -v uv &>/dev/null; then
 		export UV_PYTHON_INSTALL_MIRROR='https://registry.npmmirror.com/-/binary/python-build-standalone'
-		uv python install default
-
-		local python3="$(find "${HOME}/.local/bin" -name 'python3.*')"
-		if [[ -n "${python3}" ]]; then
-			ln -snf "${python3}" "${HOME}/.local/bin/python3"
-			ln -snf python3 "${HOME}/.local/bin/python"
-		fi
+		# uv python uninstall --all
+		uv python install --default
 	fi
 }
 
