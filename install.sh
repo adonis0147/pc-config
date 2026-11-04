@@ -52,6 +52,43 @@ function install_macports() (
 	sudo installer -pkg "${tmp}/MacPorts.pkg" -target /
 )
 
+function setup_macports_archives() (
+	local config=/opt/local/etc/macports key=/opt/local/share/macports/macports-forge.pem tmp
+	tmp="$(mktemp -d)"
+	trap 'rm -rf "${tmp}"' EXIT
+	curl -fL https://github.com/adonis0147/MacPorts-Archives/releases/download/signing-key/macports-forge.pem \
+		-o "${tmp}/key.pem"
+	printf '50682d774720a10a9be8c86e35837b5dbe540c277864bf7c37034512299149da  %s\n' "${tmp}/key.pem" |
+		shasum -a 256 -c -
+	sudo /usr/bin/install -m 644 "${tmp}/key.pem" "${key}"
+
+	if ! grep -Fxq "${key}" "${config}/pubkeys.conf"; then
+		printf '\n%s\n' "${key}" | sudo tee -a "${config}/pubkeys.conf" >/dev/null
+	fi
+	if ! grep -Eq '^name[[:space:]]+macports_forge[[:space:]]*$' "${config}/archive_sites.conf"; then
+		sudo tee -a "${config}/archive_sites.conf" >/dev/null <<'EOF'
+
+name                macports_forge
+urls                https://github.com/adonis0147/MacPorts-Archives/releases/download/
+type                tbz2
+prefix              /opt/local
+applications_dir    /Applications/MacPorts
+frameworks_dir      /opt/local/Library/Frameworks
+cxx_stdlib          libc++
+delete_la_files     yes
+EOF
+	fi
+	awk '
+		/^preferred_hosts[[:space:]]/ {
+			found = 1
+			if ($0 !~ /[[:space:]]github[.]com([[:space:]]|$)/) $0 = $0 " github.com"
+		}
+		{ print }
+		END { if (!found) print "preferred_hosts github.com" }
+	' "${config}/macports.conf" >"${tmp}/macports.conf"
+	sudo /bin/cp "${tmp}/macports.conf" "${config}/macports.conf"
+)
+
 function install_prerequisites() {
 	local manager="${1}"
 
@@ -63,6 +100,7 @@ function install_prerequisites() {
 		if [[ ! -x /opt/local/bin/port ]]; then
 			install_macports
 		fi
+		setup_macports_archives
 	fi
 }
 
