@@ -59,14 +59,18 @@ function disable_wifi_web_proxy() {
 function setup_macports_proxy() {
 	local url="${1%/}"
 	local proxy="${url#http://}"
-	sudo sed -E -i .bak \
-		-e '/^[[:space:]]*#?[[:space:]]*proxy_(override_env|http|https|rsync)[[:space:]]/d' \
-		-e "\$a\\
-proxy_override_env yes\\
-proxy_http ${proxy}\\
-proxy_https ${proxy}\\
-proxy_rsync ${proxy}
-" /opt/local/etc/macports/macports.conf
+	local config=/opt/local/etc/macports/macports.conf
+	local content
+	content=$(sudo sed -E \
+		'/^[[:space:]]*#?[[:space:]]*proxy_(override_env|http|https|rsync)([[:space:]]|$)/d' "${config}") || return $?
+	{
+		if [[ -n "${content}" ]]; then
+			printf '%s\n' "${content}"
+		fi
+		if [[ -n "${url}" ]]; then
+			printf '%s\n' 'proxy_override_env yes' "proxy_http ${proxy}" "proxy_https ${proxy}" "proxy_rsync ${proxy}"
+		fi
+	} | sudo tee "${config}" >/dev/null
 }
 
 function update_ports() {
