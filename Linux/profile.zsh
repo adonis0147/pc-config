@@ -77,6 +77,11 @@ function setup_config() {
 		fi
 	fi
 
+	if [[ ! -L "${HOME}/.config/herdr/config.toml" ]]; then
+		mkdir -p "${HOME}/.config/herdr"
+		ln -snf "${PC_CONFIG_PATH}/config/herdr.toml" "${HOME}/.config/herdr/config.toml"
+	fi
+
 	local opencode_configs=('opencode.json' 'tui.json')
 	for config in "${opencode_configs[@]}"; do
 		if [[ ! -L "${HOME}/.config/opencode/${config}" ]]; then

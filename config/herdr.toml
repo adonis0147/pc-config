@@ -1,0 +1,19 @@
+onboarding = false
+
+# https://herdr.dev/tui/docs/config-reference/
+[ui]
+prompt_new_tab_name = false
+tab_bar_position = "bottom"
+tab_bar_right = [{ type = "datetime", format = "%H:%M  %a %b %d %Y" }]
+sidebar_collapsed_mode = "hidden"
+
+[ui.sound]
+enabled = false
+
+[theme]
+name = "terminal"
+auto_switch = false
+
+[theme.custom]
+panel_bg = "#303030"
+overlay1 = "#9e9e9e"
