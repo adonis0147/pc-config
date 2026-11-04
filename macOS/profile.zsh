@@ -201,37 +201,47 @@ function install_casks() {
 
 function install_ports() {
 	local installed
-	installed="$(port installed | sed -n '2,$p' | awk '{print $1}')"
+	installed="$(port installed | sed -n '2,$p')"
 
 	local python_version='3.15'
 	local llvm_version='23'
 
 	local ports=(
-		mihomo # sudo port -N -s install mihomo +logging
-		bash
-		coreutils
-		gnutar
-		util-linux
-		ccache
-		cmake
-		ninja
-		tmux
+		'mihomo +logging'
 		"clang-${llvm_version}"
 		"lldb-${llvm_version}"
 		"python${python_version//./}"
 		autojump
+		bash
+		ccache
+		cmake
+		coreutils
 		curl
 		git
+		gnutar
 		go
 		htop
 		jq
 		neovim
+		ninja
+		tmux
+		util-linux
 		wget
 	)
 
+	local -a args
+	local version variant
 	for port in "${ports[@]}"; do
-		if ! printf '%s\n' "${installed}" | grep -qxF "${port}"; then
-			sudo port -N install "${port}"
+		args=( ${=port} )
+		version="$(awk -v name="${args[1]}" '$1 == name {print $2}' <<< "${installed}")"
+		for variant in "${args[@]:1}"; do
+			if [[ "${version}+" != *"${variant}+"* ]]; then
+				version=''
+				break
+			fi
+		done
+		if [[ -z "${version}" ]]; then
+			sudo port -N install "${args[@]}"
 		fi
 	done
 
