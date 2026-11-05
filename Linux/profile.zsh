@@ -82,6 +82,13 @@ function setup_config() {
 		ln -snf "${PC_CONFIG_PATH}/config/herdr.toml" "${HOME}/.config/herdr/config.toml"
 	fi
 
+	local herdr_plugins
+	if command -v herdr >/dev/null && herdr_plugins="$(herdr plugin list)"; then
+		if ! grep -q '^- herdr-copy-motion ' <<< "${herdr_plugins}"; then
+			herdr plugin install --yes adonis0147/herdr-copy-motion
+		fi
+	fi
+
 	local opencode_configs=('opencode.json' 'tui.json')
 	for config in "${opencode_configs[@]}"; do
 		if [[ ! -L "${HOME}/.config/opencode/${config}" ]]; then
