@@ -4,6 +4,10 @@ onboarding = false
 [terminal]
 shell_mode = "login"
 
+[keys]
+split_horizontal = "prefix+s"
+settings = "prefix+,"
+
 [ui]
 pane_borders = "auto"
 pane_gaps = false
