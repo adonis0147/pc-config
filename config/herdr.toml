@@ -5,10 +5,14 @@ onboarding = false
 shell_mode = "login"
 
 [ui]
+pane_borders = "auto"
+pane_gaps = false
+pane_outer_borders = false
+pane_scrollbars = false
 prompt_new_tab_name = false
+sidebar_collapsed_mode = "hidden"
 tab_bar_position = "bottom"
 tab_bar_right = [{ type = "datetime", format = "%H:%M  %a %b %d %Y" }]
-sidebar_collapsed_mode = "hidden"
 
 [ui.sound]
 enabled = false
@@ -18,5 +22,5 @@ name = "terminal"
 auto_switch = false
 
 [theme.custom]
-panel_bg = "#303030"
 overlay1 = "#9e9e9e"
+panel_bg = "#303030"
