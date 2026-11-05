@@ -75,7 +75,7 @@ function setup_macports_proxy() {
 
 function update_ports() {
 	sudo port -v selfupdate || return $?
-	sudo port upgrade outdated
+	sudo port -N -b upgrade outdated
 }
 
 function update_all() {
