@@ -7,7 +7,6 @@ shell_mode = "login"
 [keys]
 split_horizontal = "prefix+s"
 settings = "prefix+,"
-copy_mode = "prefix+shift+s"
 
 [ui]
 pane_borders = "auto"
@@ -31,7 +30,7 @@ overlay1 = "#9e9e9e"
 panel_bg = "#303030"
 
 [[keys.command]]
-key = "prefix+["
+key = "prefix+shift+s"
 type = "plugin_action"
 command = "herdr-copy-motion.toggle"
 description = "toggle custom copy mode"
